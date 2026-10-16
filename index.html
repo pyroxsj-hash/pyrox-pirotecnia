@@ -601,14 +601,19 @@ $('#contact-form').addEventListener('submit', e => { e.preventDefault(); $('#for
   const PAL = [[42,100,62],[24,100,58],[330,90,62],[190,90,60],[280,80,70],[50,100,75]];
   function resize(){ DPR = Math.min(devicePixelRatio||1, 2); W = cv.clientWidth; H = cv.clientHeight; cv.width = W*DPR; cv.height = H*DPR; ctx.setTransform(DPR,0,0,DPR,0,0); }
   addEventListener('resize', resize); resize();
-  let launches = 2;   // el primero que sale ya es de los que revientan en cadena
   function launch(x){
     // ~1 de cada 3 sube muy alto, casi hasta el borde superior
-    const pop = (++launches % 3) === 0;                 // cada tercer fuego revienta en cadena
-    const tall = !pop && Math.random() < .35;
-    const ty = pop ? H*(.13+Math.random()*.14) : tall ? H*(.04+Math.random()*.1) : H*(.12+Math.random()*.3);
+    const tall = Math.random() < .35;
+    const ty = tall ? H*(.04+Math.random()*.1) : H*(.12+Math.random()*.3);
     const vy = -((H - ty) * .015 + 1.2) * 1.05;   // con el roce de .985 por cuadro, llega justo a ty
-    rockets.push({x: x ?? W*(.12+Math.random()*.76), y: H, ty, vy, hue: PAL[Math.random()*PAL.length|0], big: tall, pop});
+    rockets.push({x: x ?? W*(.12+Math.random()*.76), y: H, ty, vy, hue: PAL[Math.random()*PAL.length|0], big: tall, pop: false});
+  }
+  // El fuego especial: sale solo, en un color que no usan los demás, y cada chispa revienta otra vez
+  const SPECIAL = [150,100,62];
+  function launchSpecial(){
+    const ty = H*(.12+Math.random()*.1);
+    const vy = -((H - ty) * .015 + 1.2) * 1.05;
+    rockets.push({x: W*(.35+Math.random()*.3), y: H, ty, vy, hue: SPECIAL, big: false, pop: true});
   }
   // Cada chispa de este fuego revienta en una mini-explosión propia
   let born = [];
@@ -636,12 +641,16 @@ $('#contact-form').addEventListener('submit', e => { e.preventDefault(); $('#for
       parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,d:.005+Math.random()*.003,c:[c[0],100,82],r:3.8,popAt:.5+Math.random()*.25});
     }
   }
-  let last = 0, next = 0;
+  let last = 0, next = 0, solo = 0, specialAt = 0, nextSpecial = 6000;
   function frame(t){
     ctx.globalCompositeOperation = 'destination-out';
     ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(0,0,W,H);
     ctx.globalCompositeOperation = 'lighter';
-    if(t > next){ launch(); next = t + 700 + Math.random()*1100; }
+    // Cada tanto el cielo se despeja y sale un fuego especial él solo; después siguen los normales
+    if(solo === 0 && t > nextSpecial) solo = 1;
+    if(solo === 1 && ((rockets.length === 0 && parts.length < 40) || t > nextSpecial + 5000)){ launchSpecial(); solo = 2; specialAt = t; }
+    if(solo === 2 && t > specialAt + 1500 && ((rockets.length === 0 && parts.length === 0) || t > specialAt + 9000)){ solo = 0; nextSpecial = t + 11000 + Math.random()*5000; next = t + 800; }
+    if(solo === 0 && t > next){ launch(); next = t + 700 + Math.random()*1100; }
     rockets = rockets.filter(r => {
       r.y += r.vy; r.vy *= .985;
       ctx.fillStyle = `hsl(${r.hue[0]} 100% 80%)`; ctx.beginPath(); ctx.arc(r.x,r.y,1.8,0,7); ctx.fill();
