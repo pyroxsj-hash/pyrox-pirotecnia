@@ -244,6 +244,30 @@ body.cart-open .drawer{transform:none}
 }
 @keyframes cue{0%,100%{opacity:.1}50%{opacity:1}}
 @keyframes cuebob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
+/* Borde superior: tapa lo que pasa por detrás de la barra fija al deslizar */
+.nav-edge{position:fixed;top:0;left:0;right:0;z-index:49;height:calc(var(--nav-bottom,70px) + 10px);background:linear-gradient(to bottom,var(--bg) calc(100% - 12px),transparent);pointer-events:none;opacity:0;transition:opacity .25s}
+body.scrolled .nav-edge{opacity:1}
+@media (max-width:720px){
+  .nav{background:rgba(23,20,39,.94)}
+  html{scroll-padding-top:calc(var(--nav-bottom,112px) + 2px)}
+  .hero{scroll-margin-top:calc(-1 * (var(--nav-bottom,112px) + 2px))}
+  section{padding:24px 0 18px}
+  #categorias,#productos,#como-comprar,#contacto{padding-top:22px!important}
+  .sec-head{margin-bottom:16px}
+  .sec-head h2{margin:4px 0 6px;font-size:28px}
+  .sec-head p{font-size:15px;line-height:1.4}
+  .cats{gap:10px}
+  .cat{min-height:112px;padding:16px}
+  .cat h3{font-size:17px;line-height:1.15}
+  .cat small{font-size:13px}
+  .step{padding:18px}
+  .step b{margin-bottom:8px}
+  .step h3{margin-bottom:4px}
+  .cue{margin-top:12px;gap:0;font-size:13px}
+  .cue svg{width:22px;height:22px;margin-top:-4px}
+  .cue-hero{bottom:calc(16px + env(safe-area-inset-bottom))}
+  footer{padding-top:32px}
+}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -273,6 +297,7 @@ body.cart-open .drawer{transform:none}
   </defs>
 </svg>
 
+<div class="nav-edge" aria-hidden="true"></div>
 <nav class="nav" aria-label="Principal">
   <a href="#inicio" class="brand" aria-label="Pyrox, ir al inicio">
     <span class="word"><span class="p">P</span>yro<svg class="fx" viewBox="0 0 30 30" fill="none" stroke-linecap="round" aria-hidden="true">
@@ -631,6 +656,16 @@ const watchReveal = root => root.querySelectorAll('.rv:not(.in)').forEach(el => 
 
 renderFilters(); renderGrid(); renderCart();
 watchReveal(document);
+
+/* Medidas de la barra fija y borde superior al deslizar */
+(function(){
+  const nav = document.querySelector('.nav');
+  const set = () => document.documentElement.style.setProperty('--nav-bottom', Math.ceil(nav.getBoundingClientRect().bottom) + 'px');
+  set(); addEventListener('resize', set); addEventListener('load', set);
+  if(document.fonts && document.fonts.ready) document.fonts.ready.then(set);
+  const on = () => document.body.classList.toggle('scrolled', scrollY > 60);
+  addEventListener('scroll', on, {passive:true}); on();
+})();
 
 /* Resalta en el menú la sección que se está viendo */
 (function(){
