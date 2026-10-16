@@ -429,7 +429,7 @@ body.scrolled .nav-edge{opacity:1}
 
 <footer>
   <div class="wrap">
-    <div class="legal"><b>+18</b><div><strong>Venta exclusiva a mayores de 18 años.</strong> Uso bajo responsabilidad de un adulto, a cielo abierto y lejos de personas, animales y materiales inflamables. Verificá la normativa vigente de tu provincia o municipio antes de comprar.</div></div>
+    <div class="legal"><b>+16</b><div><strong>Venta exclusiva a mayores de 16 años.</strong> Uso bajo responsabilidad de un adulto, a cielo abierto y lejos de personas, animales y materiales inflamables. Verificá la normativa vigente de tu provincia o municipio antes de comprar.</div></div>
     <div class="foot-row">
       <span>© 2026 Pyrox Pirotecnia · Sitio de demostración, marca y datos ficticios.</span>
       <span>Hecho en local con HTML, CSS y JS.</span>
@@ -641,7 +641,7 @@ $('#contact-form').addEventListener('submit', e => { e.preventDefault(); $('#for
       parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,d:.005+Math.random()*.003,c:[c[0],100,82],r:3.8,popAt:.5+Math.random()*.25});
     }
   }
-  let last = 0, next = 0, solo = 0, specialAt = 0, nextSpecial = 6000;
+  let last = 0, next = 0, solo = 0, specialAt = 0, twinAt = 0, twinX = 0, nextSpecial = 6000;
   function frame(t){
     ctx.globalCompositeOperation = 'destination-out';
     ctx.fillStyle = 'rgba(0,0,0,.18)'; ctx.fillRect(0,0,W,H);
@@ -650,7 +650,12 @@ $('#contact-form').addEventListener('submit', e => { e.preventDefault(); $('#for
     if(solo === 0 && t > nextSpecial) solo = 1;
     if(solo === 1 && ((rockets.length === 0 && parts.length < 40) || t > nextSpecial + 5000)){ launchSpecial(); solo = 2; specialAt = t; }
     if(solo === 2 && t > specialAt + 1500 && ((rockets.length === 0 && parts.length === 0) || t > specialAt + 9000)){ solo = 0; nextSpecial = t + 11000 + Math.random()*5000; next = t + 800; }
-    if(solo === 0 && t > next){ launch(); next = t + 700 + Math.random()*1100; }
+    if(solo === 0 && t > next){
+      const x0 = W*(.12+Math.random()*.76);
+      launch(x0); next = t + 700 + Math.random()*1100;
+      if(Math.random() < .4){ twinAt = t + 120 + Math.random()*300; twinX = x0 < W/2 ? W*(.55+Math.random()*.35) : W*(.1+Math.random()*.35); }   // a veces sale otro casi a la par
+    }
+    if(twinAt && t > twinAt){ if(solo === 0) launch(twinX); twinAt = 0; }
     rockets = rockets.filter(r => {
       r.y += r.vy; r.vy *= .985;
       ctx.fillStyle = `hsl(${r.hue[0]} 100% 80%)`; ctx.beginPath(); ctx.arc(r.x,r.y,1.8,0,7); ctx.fill();
