@@ -95,6 +95,8 @@ section{padding:88px 0}
 .sec-head{margin-bottom:36px;max-width:620px}
 .sec-head h2{font-size:clamp(30px,5vw,44px);margin:8px 0 10px}
 .sec-head p{color:var(--text-2)}
+.sec-head .hook{margin-top:12px;color:var(--text)}
+.sec-head .hook strong{color:var(--gold);font-weight:700}
 
 /* Categorías */
 .cats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -131,10 +133,6 @@ section{padding:88px 0}
 .add:active{transform:scale(.94)}
 
 /* Banner combos */
-.banner{border-radius:var(--radius-l);padding:48px 32px;text-align:center;position:relative;overflow:hidden;
-  background:radial-gradient(70% 120% at 50% 0%,rgba(240,53,127,.35),transparent 70%),linear-gradient(160deg,#241638,#150f26)}
-.banner h2{font-size:clamp(28px,5vw,42px);margin:8px 0 12px}
-.banner p{color:var(--text-2);max-width:520px;margin:0 auto 24px}
 
 /* Cómo comprar */
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
@@ -229,7 +227,6 @@ body.cart-open .drawer{transform:none}
   .info p{display:none}
   .price{font-size:17px}
   .add{padding:0 12px}
-  .banner{padding:36px 22px}
 }
 /* ---------- Celular: secciones con aviso de "hay más abajo" ---------- */
 .cue{display:none}
@@ -280,6 +277,27 @@ body.scrolled .nav-edge{opacity:1}
   #categorias .sec-head,#como-comprar .sec-head{margin-bottom:18px}
   .step{display:flex;flex-direction:column;justify-content:center}
 }
+/* ---------- Instalar app ---------- */
+.cta-install{margin-top:12px}
+.btn-install svg{width:19px;height:19px}
+.btn-install[hidden]{display:none}
+.modal{position:fixed;inset:0;z-index:80;display:grid;place-items:center;padding:16px;background:rgba(0,0,0,.62);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);opacity:0;pointer-events:none;transition:opacity .3s}
+.modal.open{opacity:1;pointer-events:auto}
+.modal-card{position:relative;width:100%;max-width:460px;max-height:86svh;overflow:auto;background:rgba(23,20,39,.97);border-radius:24px;padding:26px 22px 22px;box-shadow:inset 0 0 0 .5px rgba(255,255,255,.12),0 24px 60px rgba(0,0,0,.55);transform:translateY(18px) scale(.98);transition:transform .45s var(--ease)}
+.modal.open .modal-card{transform:none}
+.modal-card h2{font-size:22px;padding-right:44px;margin-bottom:6px}
+.modal-sub{color:var(--text-2);font-size:15px;line-height:1.4;margin-bottom:14px}
+.modal-x{position:absolute;top:16px;right:16px}
+.guide{border-top:.5px solid var(--line);padding:6px 0}
+.guide summary{list-style:none;cursor:pointer;padding:12px 0;font-weight:600;font-size:16px;display:flex;justify-content:space-between;align-items:center;gap:10px}
+.guide summary::-webkit-details-marker{display:none}
+.guide summary::after{content:"";width:8px;height:8px;border-right:2px solid var(--text-3);border-bottom:2px solid var(--text-3);transform:rotate(45deg);transition:transform .25s var(--ease);margin-right:4px}
+.guide[open] summary::after{transform:rotate(-135deg)}
+.guide .mine{font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold);margin-left:8px}
+.guide ol{margin:0 0 10px;padding-left:22px;color:var(--text-2);font-size:15px;line-height:1.45}
+.guide li{margin-bottom:6px}
+.guide li b{color:var(--text);font-weight:600}
+.guide .ico{display:inline-block;width:18px;height:18px;vertical-align:-4px;color:var(--gold)}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -339,6 +357,9 @@ body.scrolled .nav-edge{opacity:1}
       <a class="btn btn-primary" href="#productos">Ver productos</a>
       <a class="btn btn-ghost" href="#contacto">Contacto</a>
     </div>
+    <div class="cta-row cta-install">
+      <button class="btn btn-ghost btn-install" id="install-btn" type="button" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg>Instalar app</button>
+    </div>
     <div class="hero-badges">
       <span><svg><use href="#i-truck"/></svg>Envíos y retiro</span>
       <span><svg><use href="#i-shield"/></svg>Productos habilitados</span>
@@ -373,17 +394,6 @@ body.scrolled .nav-edge{opacity:1}
   </div>
 </section>
 
-<section style="padding-top:0">
-  <div class="wrap">
-    <div class="banner rv">
-      <span class="eyebrow">Combos</span>
-      <h2>Armamos tu noche completa.</h2>
-      <p>Decinos cuántos son y el presupuesto, y te preparamos un combo a medida con descuento por volumen.</p>
-      <a class="btn btn-primary" href="#contacto">Pedir presupuesto</a>
-    </div>
-  </div>
-</section>
-
 <section id="como-comprar" style="padding-top:24px">
   <div class="wrap">
     <div class="sec-head rv">
@@ -404,7 +414,8 @@ body.scrolled .nav-edge{opacity:1}
     <div class="sec-head rv">
       <span class="eyebrow">Contacto</span>
       <h2>Hablemos.</h2>
-      <p>Consultas, pedidos mayoristas o eventos.</p>
+      <p>Consultas, combos, pedidos mayoristas y eventos.</p>
+      <p class="hook"><strong>Pedí tu presupuesto.</strong> Armamos tu combo a medida: contanos cuántos son, qué festejan y qué efectos te gustan, y nosotros lo personalizamos a tu gusto y prioridades.</p>
     </div>
     <div class="contact">
       <div class="contact-card rv">
@@ -420,7 +431,7 @@ body.scrolled .nav-edge{opacity:1}
         <form id="contact-form">
           <div><label for="n">Nombre</label><input id="n" required autocomplete="name"></div>
           <div><label for="t">Teléfono o email</label><input id="t" required autocomplete="tel"></div>
-          <div><label for="m">Mensaje</label><textarea id="m" required placeholder="Contanos qué necesitás…"></textarea></div>
+          <div><label for="m">Mensaje</label><textarea id="m" required placeholder="Cuántos son, qué festejan, qué querés ver en el cielo…"></textarea></div>
           <button class="btn btn-primary" type="submit">Enviar mensaje</button>
           <div class="form-ok" id="form-ok">Listo, te abrimos WhatsApp con tu mensaje para que lo envíes.</div>
         </form>
@@ -452,6 +463,14 @@ body.scrolled .nav-edge{opacity:1}
   </footer>
 </aside>
 <div class="toast" id="toast" role="status"></div>
+<div class="modal" id="install-modal" role="dialog" aria-modal="true" aria-labelledby="install-title" aria-hidden="true">
+  <div class="modal-card">
+    <button class="x modal-x" id="install-close" type="button" aria-label="Cerrar"><svg><use href="#i-x"/></svg></button>
+    <h2 id="install-title">Instalá Pyrox en tu pantalla</h2>
+    <p class="modal-sub">Queda como una app más, con su ícono, y abre a pantalla completa. Seguí los pasos de tu dispositivo:</p>
+    <div id="install-guides"></div>
+  </div>
+</div>
 
 <script>
 /* ---------- Datos ---------- */
@@ -700,6 +719,46 @@ watchReveal(document);
   if(document.fonts && document.fonts.ready) document.fonts.ready.then(set);
   const on = () => document.body.classList.toggle('scrolled', scrollY > 60);
   addEventListener('scroll', on, {passive:true}); on();
+})();
+
+/* ---------- Instalar app (acceso directo en celular y compu) ---------- */
+(function(){
+  const btn = $('#install-btn'), modal = $('#install-modal'), box = $('#install-guides');
+  const ua = navigator.userAgent;
+  const iOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+  const android = /Android/i.test(ua);
+  const firefox = /Firefox|FxiOS/i.test(ua);
+  const safari = /Safari/i.test(ua) && !/Chrome|Chromium|CriOS|FxiOS|Edg|OPR|Android/i.test(ua);
+  const mac = /Mac/i.test(navigator.platform) && !iOS;
+  const standalone = matchMedia('(display-mode: standalone)').matches || navigator.standalone === true;
+  const share = '<svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 15V4M8.5 7.5 12 4l3.5 3.5M7 11H6a1 1 0 0 0-1 1v7a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-7a1 1 0 0 0-1-1h-1"/></svg>';
+  const dots = '<svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="12" cy="5" r="1.7"/><circle cx="12" cy="12" r="1.7"/><circle cx="12" cy="19" r="1.7"/></svg>';
+  const GUIDES = [
+    {id:'ios', title:'iPhone o iPad', steps:['Abrí esta página en <b>Safari</b>.', `Tocá el botón <b>Compartir</b> ${share} (abajo o arriba a la derecha).`, 'Deslizá y elegí <b>Agregar a inicio</b>.', 'Tocá <b>Agregar</b>. Pyrox aparece en tu pantalla de inicio.']},
+    {id:'android', title:'Android (Chrome)', steps:[`Tocá el menú <b>⋮</b> ${dots} arriba a la derecha.`, 'Elegí <b>Instalar app</b> (o <b>Agregar a la pantalla principal</b>).', 'Confirmá con <b>Instalar</b>.']},
+    {id:'mac', title:'Mac (Safari)', steps:['En la barra de menú tocá <b>Archivo</b>.', 'Elegí <b>Agregar al Dock…</b> (macOS Sonoma o posterior).', 'Confirmá con <b>Agregar</b>.']},
+    {id:'desktop', title:'Computadora (Chrome o Edge)', steps:['Buscá el ícono de <b>instalar</b> al final de la barra de direcciones (una pantallita con una flecha).', 'Si no lo ves: menú <b>⋮</b> → <b>Guardar y compartir</b> → <b>Instalar Pyrox</b> (en Edge: <b>Aplicaciones</b> → <b>Instalar este sitio como app</b>).', 'Confirmá con <b>Instalar</b>. Queda un acceso directo en el escritorio o el menú de apps.']},
+    {id:'firefox', title:'Firefox', steps:['En <b>Android</b>: menú <b>⋮</b> → <b>Instalar</b>.', 'En <b>computadora</b> Firefox todavía no permite instalar sitios como app: podés abrir esta página en Chrome, Edge o Safari, o guardarla en <b>Favoritos</b>.']},
+  ];
+  const mine = iOS ? 'ios' : android ? (firefox ? 'firefox' : 'android') : firefox ? 'firefox' : (mac && safari) ? 'mac' : 'desktop';
+  const order = [mine, ...GUIDES.map(g => g.id).filter(id => id !== mine)];
+  box.innerHTML = order.map(id => { const g = GUIDES.find(x => x.id === id); return `
+    <details class="guide"${id === mine ? ' open' : ''}><summary><span>${g.title}${id === mine ? '<span class="mine">tu dispositivo</span>' : ''}</span></summary>
+    <ol>${g.steps.map(t => `<li>${t}</li>`).join('')}</ol></details>`; }).join('');
+
+  let deferred = null, lastFocus = null;
+  const open = () => { lastFocus = document.activeElement; modal.classList.add('open'); modal.setAttribute('aria-hidden','false'); $('#install-close').focus(); };
+  const close = () => { modal.classList.remove('open'); modal.setAttribute('aria-hidden','true'); if(lastFocus) lastFocus.focus(); };
+  if(!standalone) btn.hidden = false;
+  addEventListener('beforeinstallprompt', e => { e.preventDefault(); deferred = e; });
+  addEventListener('appinstalled', () => { deferred = null; btn.hidden = true; close(); toast('¡Pyrox instalada!'); });
+  btn.addEventListener('click', async () => {
+    if(deferred){ deferred.prompt(); try{ await deferred.userChoice; }catch(e){} deferred = null; }
+    else open();
+  });
+  $('#install-close').addEventListener('click', close);
+  modal.addEventListener('click', e => { if(e.target === modal) close(); });
+  document.addEventListener('keydown', e => { if(e.key === 'Escape' && modal.classList.contains('open')) close(); });
 })();
 
 /* Resalta en el menú la sección que se está viendo */
