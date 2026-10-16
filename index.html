@@ -1,10 +1,13 @@
 <!doctype html>
+<!-- Pyrox Pirotecnia — Copyright (c) 2026 Pyrox Pirotecnia (autor: Felipe Manrique). Todos los derechos reservados. Ver LICENSE. -->
 <html lang="es-AR">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Pyrox Pirotecnia · Demo</title>
-<meta name="description" content="Demo de tienda online de pirotecnia: catálogo, carrito y contacto.">
+<title>Pyrox Pirotecnia</title>
+<meta name="description" content="Pyrox Pirotecnia: tortas, baterías, cañitas, fuentes, bengalas y combos. Armá tu carrito y coordinamos la entrega por WhatsApp.">
+<meta name="author" content="Pyrox Pirotecnia">
+<meta name="copyright" content="© 2026 Pyrox Pirotecnia. Todos los derechos reservados.">
 <meta name="theme-color" content="#0B0A14">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
@@ -407,7 +410,7 @@ body.scrolled .nav-edge{opacity:1}
       <div class="contact-card rv">
         <div class="rows">
           <a href="https://wa.me/5491100000000" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg><div style="border:0;padding:0"><small>WhatsApp</small><span>+54 9 11 0000-0000</span></div></a>
-          <a href="mailto:ventas@pyrox-demo.com"><svg><use href="#i-mail"/></svg><div style="border:0;padding:0"><small>Email</small><span>ventas@pyrox-demo.com</span></div></a>
+          <a href="mailto:pyroxsj@gmail.com"><svg><use href="#i-mail"/></svg><div style="border:0;padding:0"><small>Email</small><span>pyroxsj@gmail.com</span></div></a>
           <a href="#"><svg><use href="#i-ig"/></svg><div style="border:0;padding:0"><small>Instagram</small><span>@pyrox.pirotecnia</span></div></a>
           <div><svg><use href="#i-pin"/></svg><div style="border:0;padding:0"><small>Local</small><span>Av. Siempreviva 742, Buenos Aires</span></div></div>
           <div><svg><use href="#i-clock"/></svg><div style="border:0;padding:0"><small>Horarios</small><span>Lun a Sáb · 9 a 20 h</span></div></div>
@@ -419,7 +422,7 @@ body.scrolled .nav-edge{opacity:1}
           <div><label for="t">Teléfono o email</label><input id="t" required autocomplete="tel"></div>
           <div><label for="m">Mensaje</label><textarea id="m" required placeholder="Contanos qué necesitás…"></textarea></div>
           <button class="btn btn-primary" type="submit">Enviar mensaje</button>
-          <div class="form-ok" id="form-ok">¡Listo! Es una demo: el mensaje no se envió, pero así quedaría.</div>
+          <div class="form-ok" id="form-ok">Listo, te abrimos WhatsApp con tu mensaje para que lo envíes.</div>
         </form>
       </div>
     </div>
@@ -431,8 +434,8 @@ body.scrolled .nav-edge{opacity:1}
   <div class="wrap">
     <div class="legal"><b>+16</b><div><strong>Venta exclusiva a mayores de 16 años.</strong> Uso bajo responsabilidad de un adulto, a cielo abierto y lejos de personas, animales y materiales inflamables. Verificá la normativa vigente de tu provincia o municipio antes de comprar.</div></div>
     <div class="foot-row">
-      <span>© 2026 Pyrox Pirotecnia · Sitio de demostración, marca y datos ficticios.</span>
-      <span>Hecho en local con HTML, CSS y JS.</span>
+      <span>© 2026 Pyrox Pirotecnia. Todos los derechos reservados.</span>
+      <span><a href="privacidad.html" style="text-decoration:underline">Privacidad y condiciones</a></span>
     </div>
   </div>
 </footer>
@@ -590,8 +593,13 @@ document.addEventListener('keydown', e => { if(e.key==='Escape') setCart(false);
 let tt;
 function toast(msg){ const t = $('#toast'); t.textContent = msg; t.classList.add('show'); clearTimeout(tt); tt = setTimeout(()=>t.classList.remove('show'), 1800); }
 
-/* ---------- Contacto (demo) ---------- */
-$('#contact-form').addEventListener('submit', e => { e.preventDefault(); $('#form-ok').style.display='block'; e.target.reset(); });
+/* ---------- Contacto: arma el mensaje y abre WhatsApp ---------- */
+$('#contact-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const msg = `Hola Pyrox! Soy ${$('#n').value.trim()} (${$('#t').value.trim()}).\n\n${$('#m').value.trim()}`;
+  window.open(`https://wa.me/${WA}?text=${encodeURIComponent(msg)}`, '_blank', 'noopener');
+  $('#form-ok').style.display = 'block'; e.target.reset();
+});
 
 /* ---------- Cielo con fuegos artificiales ---------- */
 (function(){
