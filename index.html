@@ -227,6 +227,22 @@ body.cart-open .drawer{transform:none}
   .add{padding:0 12px}
   .banner{padding:36px 22px}
 }
+/* ---------- Celular: secciones con aviso de "hay más abajo" ---------- */
+.cue{display:none}
+@media (max-width:720px){
+  html{scroll-snap-type:y proximity}
+  .hero{scroll-snap-align:start;scroll-margin-top:-116px}
+  section{scroll-snap-align:start}
+  .cue{display:flex;flex-direction:column;align-items:center;gap:2px;margin:36px auto 0;width:max-content;color:#fff;font-size:13px;font-weight:500;letter-spacing:.06em;animation:cue 2.6s ease-in-out infinite}
+  .cue svg{width:24px;height:24px;animation:cuebob 2.6s ease-in-out infinite}
+  .cue-hero{position:absolute;left:50%;bottom:calc(22px + env(safe-area-inset-bottom));transform:translateX(-50%);margin:0}
+  .hero-inner{padding-bottom:110px}
+  .card{animation:none}
+  .js .rv{opacity:0;transform:translateY(22px);transition:opacity .7s var(--ease),transform .7s var(--ease)}
+  .js .rv.in{opacity:1;transform:none}
+}
+@keyframes cue{0%,100%{opacity:.1}50%{opacity:1}}
+@keyframes cuebob{0%,100%{transform:translateY(0)}50%{transform:translateY(4px)}}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition-duration:.01ms!important}html{scroll-behavior:auto}}
 </style>
 </head>
@@ -292,34 +308,37 @@ body.cart-open .drawer{transform:none}
       <span><svg><use href="#i-star"/></svg>Combos armados</span>
     </div>
   </div>
+  <a class="cue cue-hero" href="#categorias" aria-label="Ir a Categorías"><span>Categorías</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
 </header>
 
 <main>
 <section id="categorias">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head rv">
       <span class="eyebrow">Categorías</span>
       <h2>Elegí tu espectáculo.</h2>
       <p>Del festejo familiar al cierre de fiesta. Tocá una categoría para ver los productos.</p>
     </div>
     <div class="cats" id="cats"></div>
+    <a class="cue" href="#productos" aria-label="Ir a Productos"><span>Productos</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
   </div>
 </section>
 
 <section id="productos" style="padding-top:24px">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head rv">
       <span class="eyebrow">Catálogo</span>
       <h2>Todos los productos.</h2>
     </div>
     <div class="filters" id="filters" role="group" aria-label="Filtrar por categoría"></div>
     <div class="grid" id="grid"></div>
+    <a class="cue" href="#como-comprar" aria-label="Ir a Cómo comprar"><span>Cómo comprar</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
   </div>
 </section>
 
 <section style="padding-top:0">
   <div class="wrap">
-    <div class="banner">
+    <div class="banner rv">
       <span class="eyebrow">Combos</span>
       <h2>Armamos tu noche completa.</h2>
       <p>Decinos cuántos son y el presupuesto, y te preparamos un combo a medida con descuento por volumen.</p>
@@ -330,27 +349,28 @@ body.cart-open .drawer{transform:none}
 
 <section id="como-comprar" style="padding-top:24px">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head rv">
       <span class="eyebrow">Cómo comprar</span>
       <h2>Tres pasos, sin vueltas.</h2>
     </div>
     <div class="steps">
-      <div class="step"><b>1</b><h3>Armá tu carrito</h3><p>Sumá los productos que quieras y ajustá las cantidades.</p></div>
-      <div class="step"><b>2</b><h3>Enviá el pedido</h3><p>Te abrimos un WhatsApp con el detalle listo para mandar.</p></div>
-      <div class="step"><b>3</b><h3>Recibí o retirá</h3><p>Coordinamos entrega o retiro y pagás como te quede cómodo.</p></div>
+      <div class="step rv"><b>1</b><h3>Armá tu carrito</h3><p>Sumá los productos que quieras y ajustá las cantidades.</p></div>
+      <div class="step rv"><b>2</b><h3>Enviá el pedido</h3><p>Te abrimos un WhatsApp con el detalle listo para mandar.</p></div>
+      <div class="step rv"><b>3</b><h3>Recibí o retirá</h3><p>Coordinamos entrega o retiro y pagás como te quede cómodo.</p></div>
     </div>
+    <a class="cue" href="#contacto" aria-label="Ir a Contacto"><span>Contacto</span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></a>
   </div>
 </section>
 
 <section id="contacto" style="padding-top:24px">
   <div class="wrap">
-    <div class="sec-head">
+    <div class="sec-head rv">
       <span class="eyebrow">Contacto</span>
       <h2>Hablemos.</h2>
       <p>Consultas, pedidos mayoristas o eventos.</p>
     </div>
     <div class="contact">
-      <div class="contact-card">
+      <div class="contact-card rv">
         <div class="rows">
           <a href="https://wa.me/5491100000000" target="_blank" rel="noopener"><svg><use href="#i-wa"/></svg><div style="border:0;padding:0"><small>WhatsApp</small><span>+54 9 11 0000-0000</span></div></a>
           <a href="mailto:ventas@pyrox-demo.com"><svg><use href="#i-mail"/></svg><div style="border:0;padding:0"><small>Email</small><span>ventas@pyrox-demo.com</span></div></a>
@@ -359,7 +379,7 @@ body.cart-open .drawer{transform:none}
           <div><svg><use href="#i-clock"/></svg><div style="border:0;padding:0"><small>Horarios</small><span>Lun a Sáb · 9 a 20 h</span></div></div>
         </div>
       </div>
-      <div class="contact-card">
+      <div class="contact-card rv">
         <form id="contact-form">
           <div><label for="n">Nombre</label><input id="n" required autocomplete="name"></div>
           <div><label for="t">Teléfono o email</label><input id="t" required autocomplete="tel"></div>
@@ -458,7 +478,7 @@ function art(p, id){
 /* ---------- Categorías y catálogo ---------- */
 let filter = 'all';
 $('#cats').innerHTML = CATS.map(c => `
-  <button class="cat" style="--c:${c.c}" data-cat="${c.id}">
+  <button class="cat rv" style="--c:${c.c}" data-cat="${c.id}">
     <svg><use href="#${c.icon}"/></svg>
     <h3>${c.name}</h3><small>${c.sub}</small>
   </button>`).join('');
@@ -471,7 +491,7 @@ function renderFilters(){
 function renderGrid(){
   const list = PRODUCTS.filter(p => filter==='all' || p.cat===filter);
   $('#grid').innerHTML = list.map((p,i) => `
-    <article class="card" style="animation-delay:${i*40}ms">
+    <article class="card rv" style="animation-delay:${i*40}ms;transition-delay:${(i%2)*90}ms">
       <div class="art">${art(p,'p'+p.id)}${p.tag?`<span class="tag">${p.tag}</span>`:''}</div>
       <div class="info">
         <span class="cat-name">${CATS.find(c=>c.id===p.cat).name}</span>
@@ -481,7 +501,7 @@ function renderGrid(){
     </article>`).join('');
 }
 function setFilter(f, scroll){
-  filter = f; renderFilters(); renderGrid();
+  filter = f; renderFilters(); renderGrid(); watchReveal($('#grid'));
   if(scroll) $('#productos').scrollIntoView({behavior:'smooth'});
 }
 $('#cats').addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if(b) setFilter(b.dataset.cat, true); });
@@ -586,7 +606,13 @@ $('#contact-form').addEventListener('submit', e => { e.preventDefault(); $('#for
   cv.parentElement.addEventListener('pointerdown', e => { if(e.target.closest('a,button')) return; launch(e.clientX); });
 })();
 
+/* Aparición suave de cada bloque al deslizar (solo se nota en celular) */
+const rvIO = new IntersectionObserver(es => es.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); rvIO.unobserve(e.target); } }), {threshold:.12, rootMargin:'0px 0px -6% 0px'});
+document.documentElement.classList.add('js');
+const watchReveal = root => root.querySelectorAll('.rv:not(.in)').forEach(el => rvIO.observe(el));
+
 renderFilters(); renderGrid(); renderCart();
+watchReveal(document);
 
 /* Resalta en el menú la sección que se está viendo */
 (function(){
