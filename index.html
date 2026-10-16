@@ -572,14 +572,31 @@ $('#contact-form').addEventListener('submit', e => { e.preventDefault(); $('#for
     const tall = Math.random() < .35;
     const ty = tall ? H*(.04+Math.random()*.1) : H*(.12+Math.random()*.3);
     const vy = -((H - ty) * .015 + 1.2) * 1.05;   // con el roce de .985 por cuadro, llega justo a ty
-    rockets.push({x: x ?? W*(.12+Math.random()*.76), y: H, ty, vy, hue: PAL[Math.random()*PAL.length|0], big: tall});
+    rockets.push({x: x ?? W*(.12+Math.random()*.76), y: H, ty, vy, hue: PAL[Math.random()*PAL.length|0], big: tall, pop: Math.random() < .4});
   }
-  function burst(x,y,c,big){
+  // Cada chispa de este fuego revienta en una mini-explosión propia
+  function miniPop(p){
+    const k = Math.min(1.4, Math.max(1, W/700)), n = 8 + Math.random()*5|0;
+    parts.push({x:p.x,y:p.y,vx:0,vy:0,life:1,d:.14,c:[p.c[0],40,92],r:6*k});          // destello
+    for(let i=0;i<n;i++){
+      const a = Math.random()*Math.PI*2, s = (.5+Math.random()*1.9)*k;
+      parts.push({x:p.x,y:p.y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,d:.035+Math.random()*.03,c:p.c,r:1.4});
+    }
+  }
+  function burst(x,y,c,big,pop){
     const k = Math.min(1.6, Math.max(1, W/700)) * (big ? 1.35 : 1.15);   // escala con la pantalla
+    if(pop) return burstPop(x,y,c,big);
     const n = (big ? 140 : 100) + Math.random()*50|0, two = Math.random()<.4, c2 = PAL[Math.random()*PAL.length|0];
     for(let i=0;i<n;i++){
       const a = Math.random()*Math.PI*2, s = (1.4+Math.random()*4.2) * k * (i%2 && two ? .55 : 1), col = i%2 && two ? c2 : c;
       parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,d:.007+Math.random()*.01,c:col,r:big?2.2:1.8});
+    }
+  }
+  function burstPop(x,y,c,big){
+    const k = Math.min(1.6, Math.max(1, W/700)) * (big ? 1.25 : 1.1), n = big ? 44 : 34;
+    for(let i=0;i<n;i++){
+      const a = i/n*Math.PI*2 + Math.random()*.2, s = (2.2+Math.random()*2.2)*k;
+      parts.push({x,y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,life:1,d:.006+Math.random()*.004,c,r:2.6,popAt:.42+Math.random()*.3});
     }
   }
   let last = 0, next = 0;
@@ -591,10 +608,11 @@ $('#contact-form').addEventListener('submit', e => { e.preventDefault(); $('#for
     rockets = rockets.filter(r => {
       r.y += r.vy; r.vy *= .985;
       ctx.fillStyle = `hsl(${r.hue[0]} 100% 80%)`; ctx.beginPath(); ctx.arc(r.x,r.y,1.8,0,7); ctx.fill();
-      if(r.y <= r.ty || r.vy > -1.2){ burst(r.x,r.y,r.hue,r.big); return false; } return true;
+      if(r.y <= r.ty || r.vy > -1.2){ burst(r.x,r.y,r.hue,r.big,r.pop); return false; } return true;
     });
     parts = parts.filter(p => {
       p.x += p.vx; p.y += p.vy; p.vx *= .985; p.vy = p.vy*.985 + .035; p.life -= p.d;
+      if(p.popAt && p.life <= p.popAt){ miniPop(p); return false; }
       if(p.life <= 0) return false;
       ctx.fillStyle = `hsla(${p.c[0]} ${p.c[1]}% ${p.c[2]}% / ${p.life})`;
       ctx.beginPath(); ctx.arc(p.x,p.y,p.r*p.life+.5,0,7); ctx.fill(); return true;
