@@ -1,0 +1,615 @@
+<!doctype html>
+<!-- Pyrox Pirotecnia — Panel de servicio. Copyright (c) 2026 Pyrox Pirotecnia (autor: Felipe Manrique). Todos los derechos reservados. Ver ../LICENSE -->
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pyrox · Panel de servicio</title>
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#0B0A14">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Pyrox Panel">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" href="../favicon.png">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+<script src="https://accounts.google.com/gsi/client" async defer onload="gsiReady()"></script>
+<style>
+:root{color-scheme:dark;--bg:#0B0A14;--bg2:#110F1D;--surface:#171427;--surface2:#1F1B33;--line:rgba(255,255,255,.09);--text:#F6F1E7;--text2:#B9B3C9;--text3:#7F7996;--ember:#FF7A1A;--gold:#FFC24D;--magenta:#F0357F;--green:#4ADE80;--red:#FF5A5F;--ease:cubic-bezier(.32,.72,0,1)}
+*{box-sizing:border-box;margin:0}
+html,body{background:var(--bg);color:var(--text);font:400 16px/1.45 -apple-system,BlinkMacSystemFont,"SF Pro Text","Segoe UI",Roboto,Helvetica,Arial,sans-serif;-webkit-font-smoothing:antialiased}
+body{padding:0 0 calc(86px + env(safe-area-inset-bottom))}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer;background:none;border:0}
+a{color:var(--gold)}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header.top{position:sticky;top:0;z-index:20;background:rgba(11,10,20,.92);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-bottom:.5px solid var(--line);padding:calc(10px + env(safe-area-inset-top)) 0 10px}
+header.top .wrap{display:flex;align-items:center;gap:10px}
+.logo{font-weight:800;font-size:22px;letter-spacing:-.03em}
+.logo b{background:linear-gradient(135deg,#F0357F,#FF7A1A 55%,#FFC24D);-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo small{display:block;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);margin-top:-2px}
+.sp{flex:1}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:42px;padding:0 16px;border-radius:999px;font-weight:600;font-size:15px;background:rgba(255,255,255,.09);transition:transform .2s var(--ease),filter .2s}
+.btn:active{transform:scale(.96)}
+.btn.primary{background:linear-gradient(135deg,var(--gold),var(--ember));color:#1a0d02}
+.btn.danger{background:rgba(255,90,95,.14);color:var(--red)}
+.btn.sm{height:34px;padding:0 12px;font-size:14px}
+.btn[disabled]{opacity:.45;pointer-events:none}
+main{padding-top:16px}
+h2{font-size:22px;letter-spacing:-.02em;margin-bottom:4px}
+.hint{color:var(--text3);font-size:13.5px}
+.card{background:var(--surface);border-radius:18px;padding:16px;box-shadow:inset 0 0 0 .5px var(--line)}
+.stack{display:flex;flex-direction:column;gap:12px}
+.row{display:flex;gap:10px;align-items:center}
+.wrapx{flex-wrap:wrap}
+input[type=text],input[type=number],input[type=tel],input[type=email],input[type=search],select,textarea{width:100%;background:var(--bg2);border:0;border-radius:12px;padding:12px 13px;box-shadow:inset 0 0 0 .5px var(--line);outline:none}
+input:focus,select:focus,textarea:focus{box-shadow:inset 0 0 0 1.5px var(--ember)}
+textarea{min-height:110px;resize:vertical;line-height:1.4}
+label.l{display:block;font-size:12.5px;font-weight:600;color:var(--text2);margin:0 0 5px;letter-spacing:.02em}
+.chips{display:flex;gap:8px;overflow-x:auto;padding:2px 0 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;height:34px;padding:0 13px;border-radius:999px;font-size:14px;font-weight:500;color:var(--text2);background:var(--surface);box-shadow:inset 0 0 0 .5px var(--line)}
+.chip[aria-pressed=true]{background:var(--text);color:#15111f}
+.list{display:flex;flex-direction:column;gap:10px}
+.prod{display:flex;gap:12px;align-items:center;padding:10px;border-radius:16px;background:var(--surface);box-shadow:inset 0 0 0 .5px var(--line);cursor:pointer;transition:background .2s}
+.prod:hover{background:var(--surface2)}
+.prod.off{opacity:.55}
+.th{flex:none;width:62px;height:62px;border-radius:12px;background:#0d0b18 center/cover no-repeat;display:grid;place-items:center;color:var(--text3);font-size:11px;overflow:hidden;position:relative}
+.th img{width:100%;height:100%;object-fit:cover;display:block}
+.info{flex:1;min-width:0}
+.info b{display:block;font-size:16px;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info small{display:block;color:var(--text3);font-size:12.5px;margin-top:1px}
+.tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:5px}
+.tag{font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px;background:rgba(255,255,255,.08);color:var(--text2)}
+.tag.of{background:rgba(240,53,127,.18);color:#ff7fb0}
+.tag.ok{background:rgba(74,222,128,.14);color:var(--green)}
+.tag.warn{background:rgba(255,194,77,.15);color:var(--gold)}
+.tag.bad{background:rgba(255,90,95,.14);color:var(--red)}
+.price{font-weight:700;text-align:right;font-size:15px}
+.price s{display:block;color:var(--text3);font-weight:400;font-size:12.5px}
+.sw{position:relative;flex:none;width:50px;height:30px;border-radius:999px;background:#3a3550;transition:background .25s}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:24px;height:24px;border-radius:50%;background:#fff;transition:transform .25s var(--ease)}
+.sw[aria-checked=true]{background:var(--green)}
+.sw[aria-checked=true]::after{transform:translateX(20px)}
+.seg{display:flex;background:var(--bg2);border-radius:12px;padding:3px;box-shadow:inset 0 0 0 .5px var(--line)}
+.seg button{flex:1;height:38px;border-radius:9px;font-weight:600;font-size:14.5px;color:var(--text2)}
+.seg button[aria-pressed=true]{background:var(--surface2);color:var(--text);box-shadow:0 1px 3px rgba(0,0,0,.4)}
+nav.tabs{position:fixed;left:0;right:0;bottom:0;z-index:30;background:rgba(17,15,29,.94);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border-top:.5px solid var(--line);padding:6px 6px calc(6px + env(safe-area-inset-bottom));display:flex;justify-content:center;gap:2px}
+nav.tabs button{flex:1;max-width:160px;display:flex;flex-direction:column;align-items:center;gap:2px;padding:7px 4px;border-radius:12px;font-size:11.5px;font-weight:600;color:var(--text3)}
+nav.tabs button svg{width:24px;height:24px}
+nav.tabs button[aria-current=true]{color:var(--gold);background:rgba(255,194,77,.09)}
+.scrim{position:fixed;inset:0;z-index:50;background:rgba(0,0,0,.62);opacity:0;pointer-events:none;transition:opacity .3s}
+.scrim.on{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:51;max-height:94dvh;display:flex;flex-direction:column;background:#151225;border-radius:24px 24px 0 0;box-shadow:0 -10px 50px rgba(0,0,0,.6);transform:translateY(105%);transition:transform .45s var(--ease)}
+.sheet.on{transform:none}
+.sheet .in{max-width:760px;width:100%;margin:0 auto;display:flex;flex-direction:column;min-height:0}
+.sheet header{display:flex;align-items:center;gap:10px;padding:16px 16px 10px}
+.sheet header h2{flex:1;margin:0;font-size:20px}
+.sheet .body{overflow-y:auto;padding:4px 16px 16px;-webkit-overflow-scrolling:touch}
+.sheet footer{display:flex;gap:10px;padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:.5px solid var(--line)}
+.sheet footer .btn{flex:1}
+.x{width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,.1);display:grid;place-items:center;font-size:18px;line-height:1}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.media{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+.mt{position:relative;aspect-ratio:1;border-radius:12px;overflow:hidden;background:#0d0b18}
+.mt img{width:100%;height:100%;object-fit:cover}
+.mt .vb{position:absolute;left:6px;top:6px;font-size:10.5px;font-weight:700;background:rgba(0,0,0,.65);padding:2px 7px;border-radius:999px;letter-spacing:.05em}
+.mt .cv{position:absolute;left:6px;bottom:6px;font-size:10.5px;font-weight:700;background:var(--gold);color:#1a0d02;padding:2px 7px;border-radius:999px}
+.mt .ac{position:absolute;right:5px;top:5px;display:flex;flex-direction:column;gap:5px}
+.mt .ac button{width:28px;height:28px;border-radius:50%;background:rgba(0,0,0,.65);font-size:13px;display:grid;place-items:center}
+.preview{background:#0d0b18;border-radius:14px;padding:12px;white-space:pre-wrap;font-size:14.5px;line-height:1.4;color:#d9f7e3;box-shadow:inset 0 0 0 .5px var(--line)}
+.pchips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0}
+.pchip{font-size:12.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:rgba(255,194,77,.13);color:var(--gold);font-family:ui-monospace,Menlo,monospace}
+#toast{position:fixed;left:50%;bottom:calc(92px + env(safe-area-inset-bottom));z-index:80;transform:translate(-50%,40px);opacity:0;padding:12px 18px;border-radius:999px;background:#2b2644;box-shadow:0 8px 30px rgba(0,0,0,.5);font-size:15px;font-weight:500;max-width:92vw;text-align:center;transition:all .4s var(--ease);pointer-events:none}
+#toast.on{transform:translate(-50%,0);opacity:1}
+#toast.err{background:#5a1e24;color:#ffd7d9}
+#busy{position:fixed;inset:0;z-index:90;background:rgba(11,10,20,.72);display:none;align-items:center;justify-content:center;flex-direction:column;gap:14px;font-weight:600}
+#busy.on{display:flex}
+.spin{width:38px;height:38px;border-radius:50%;border:4px solid rgba(255,255,255,.18);border-top-color:var(--gold);animation:sp 0.8s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
+.empty{text-align:center;color:var(--text3);padding:40px 10px}
+.combos{display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(74,222,128,.14),rgba(255,194,77,.1))}
+.cat{display:grid;gap:10px;grid-template-columns:1fr}
+.cat .top{display:flex;gap:8px;align-items:center}
+.cat .top input{flex:1}
+.dot{width:26px;height:26px;border-radius:50%;flex:none}
+input[type=color]{width:42px;height:38px;padding:2px;border-radius:10px;background:var(--bg2);border:0;flex:none}
+.note{font-size:13px;color:var(--text3);margin-top:12px}
+.linkrow{display:flex;gap:14px;flex-wrap:wrap;margin-top:6px;font-size:13.5px}
+@media (min-width:700px){.sheet{left:50%;right:auto;width:640px;transform:translate(-50%,105%);border-radius:24px 24px 0 0}.sheet.on{transform:translate(-50%,0)}}
+#login{position:fixed;inset:0;z-index:120;background:var(--bg);display:none;align-items:center;justify-content:center;padding:24px;text-align:center}
+#login.on{display:flex}
+#login .box{max-width:360px;width:100%;display:flex;flex-direction:column;align-items:center;gap:14px}
+#login .logo{font-size:34px}
+#login p{color:var(--text2);font-size:15px;line-height:1.45}
+#login .err{color:var(--red);font-size:14px;min-height:20px}
+#gbtn{min-height:44px;display:flex;justify-content:center}
+.signout{font-size:13px;color:var(--text3);text-decoration:underline;padding:6px}
+</style>
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <div class="logo"><b>Pyrox</b><small>Panel de servicio</small></div>
+  <div class="sp"></div>
+  <button class="btn sm" id="btn-sync" type="button" title="Lee la carpeta de Drive y actualiza la hoja">⟳ Sincronizar</button>
+  <a class="btn sm" id="lnk-site" href="../" target="_blank" rel="noopener">Ver tienda</a>
+  <button class="btn sm" id="btn-out" type="button" title="Cerrar sesión" aria-label="Cerrar sesión">Salir</button>
+</div></header>
+<main><div class="wrap" id="view"></div></main>
+<div id="login" role="dialog" aria-modal="true" aria-label="Ingresar"><div class="box">
+  <div class="logo"><b>Pyrox</b><small>Panel de servicio</small></div>
+  <p>Ingresá con la cuenta de Google del negocio para administrar productos, ofertas y mensajes.</p>
+  <div id="gbtn"></div>
+  <div class="err" id="login-err"></div>
+  <p style="font-size:12.5px;color:var(--text3)">Solo tiene acceso la cuenta autorizada.</p>
+</div></div>
+
+<nav class="tabs" id="tabs">
+  <button type="button" data-tab="prod" aria-current="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3.5 7.5 12 3l8.5 4.5v9L12 21l-8.5-4.5z"/><path d="m3.5 7.5 8.5 4.5 8.5-4.5M12 12v9"/></svg>Productos</button>
+  <button type="button" data-tab="cat"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="7" height="7" rx="2"/><rect x="13" y="4" width="7" height="7" rx="2"/><rect x="4" y="13" width="7" height="7" rx="2"/><rect x="13" y="13" width="7" height="7" rx="2"/></svg>Categorías</button>
+  <button type="button" data-tab="msg"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg>Mensajes</button>
+  <button type="button" data-tab="biz"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2-1.2L14.2 3h-4l-.4 2.6a7 7 0 0 0-2 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2 1.2l.4 2.6h4l.4-2.6a7 7 0 0 0 2-1.2l2.3.9 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z"/></svg>Negocio</button>
+</nav>
+
+<div class="scrim" id="scrim"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title"><div class="in">
+  <header><h2 id="sheet-title"></h2><button class="x" id="sheet-x" type="button" aria-label="Cerrar">✕</button></header>
+  <div class="body" id="sheet-body"></div>
+  <footer id="sheet-foot"></footer>
+</div></div>
+<div id="toast" role="status"></div>
+<div id="busy"><div class="spin"></div><div id="busy-t">Trabajando…</div></div>
+
+<script>
+'use strict';
+var S = null, TAB = 'prod', F = { q: '', cat: '', chip: 'all' }, CLOSE_CB = null;
+var ICONS = [['torta','Torta'],['bateria','Batería'],['mortero','Mortero'],['canita','Caña voladora'],['giratorio','Giratorio'],['bomba','Petardo / bomba'],['bengala','Bengala / infantil'],['fuente','Fuente / volcán'],['combo','Combo / regalo'],['pedido','A pedido'],['estrella','Estrella']];
+
+/* ---------- utilidades ---------- */
+function $(s, r){ return (r || document).querySelector(s); }
+function esc(s){ return String(s == null ? '' : s).replace(/[&<>"']/g, function(c){ return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]; }); }
+function money(n){ return n == null || n === '' ? '—' : '$' + Math.round(n).toLocaleString('es-AR'); }
+function cap(s){ s = String(s == null ? '' : s).trim(); return s ? s.charAt(0).toUpperCase() + s.slice(1) : s; }
+function ref_(p){ return p.precio == null ? null : (p.oferta > 0 ? p.precio : (p.lista > p.precio ? p.lista : null)); }
+function pct_(p){ return p.oferta > 0 ? p.oferta : (ref_(p) ? Math.round((1 - p.precio / p.lista) * 100) : 0); }
+function final_(p){ return p.precio == null ? null : (p.oferta > 0 ? Math.round(p.precio * (1 - p.oferta / 100)) : p.precio); }
+function thumb(id, w){ return 'https://lh3.googleusercontent.com/d/' + id + '=w' + (w || 300); }
+function vthumb(id, w){ return 'https://drive.google.com/thumbnail?id=' + id + '&sz=w' + (w || 300); }
+var API = 'https://script.google.com/macros/s/AKfycbyg0jqQ5yYkTWRTwbm0_BIlA-ylDhYorCzhQ7CmyqV71bxTyGZQin4mZjF4T4IgJr-ttg/exec';
+var CLIENT_ID = '801912406537-ab8ijt5r1easq506befk4j34b1ae8j98.apps.googleusercontent.com';
+var TOKEN = '', waiters = [], gsiOk = false;
+try { TOKEN = sessionStorage.getItem('pyrox_tk') || ''; } catch(e){}
+function tokenOk(t){
+  try { var p = JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); return p.exp * 1000 > Date.now() + 60000; } catch(e){ return false; }
+}
+function showLogin(msg){
+  $('#login').classList.add('on'); $('#login-err').textContent = msg || '';
+  if(gsiOk){ try { google.accounts.id.prompt(); } catch(e){} }
+}
+function onCred(resp){
+  TOKEN = resp.credential;
+  try { sessionStorage.setItem('pyrox_tk', TOKEN); } catch(e){}
+  $('#login').classList.remove('on');
+  var w = waiters; waiters = []; w.forEach(function(f){ f(); });
+  if(!S) start();
+}
+function gsiReady(){
+  gsiOk = true;
+  google.accounts.id.initialize({ client_id: CLIENT_ID, callback: onCred, auto_select: true, cancel_on_tap_outside: false });
+  google.accounts.id.renderButton($('#gbtn'), { theme: 'filled_black', size: 'large', shape: 'pill', text: 'signin_with', locale: 'es', width: 280 });
+  if(!tokenOk(TOKEN)){ showLogin(''); }
+}
+function ensureLogin(){
+  if(tokenOk(TOKEN)) return Promise.resolve();
+  return new Promise(function(ok){ waiters.push(ok); showLogin('Tu sesión venció. Volvé a ingresar.'); });
+}
+function call(fn){
+  var args = Array.prototype.slice.call(arguments, 1);
+  return ensureLogin().then(function(){
+    return fetch(API, { method: 'POST', headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ token: TOKEN, action: fn, args: args }) });
+  }).then(function(r){ return r.json(); }).then(function(j){
+    if(!j.ok){
+      if(/^auth:/.test(j.error)){ TOKEN = ''; try { sessionStorage.removeItem('pyrox_tk'); } catch(e){} showLogin(j.error.slice(5)); }
+      throw new Error(j.error.replace(/^auth:/, ''));
+    }
+    return j.data;
+  }, function(){ throw new Error('No hay conexión con el servidor. Revisá tu internet.'); });
+}
+$('#btn-out').onclick = function(){
+  TOKEN = ''; S = null; try { sessionStorage.removeItem('pyrox_tk'); } catch(e){}
+  try { google.accounts.id.disableAutoSelect(); } catch(e){}
+  $('#view').innerHTML = ''; showLogin('');
+};
+var tt;
+function toast(msg, err){ var t = $('#toast'); t.textContent = msg; t.className = 'on' + (err ? ' err' : ''); clearTimeout(tt); tt = setTimeout(function(){ t.className = ''; }, err ? 5200 : 2600); }
+function busy(on, txt){ $('#busy').classList.toggle('on', !!on); if(txt) $('#busy-t').textContent = txt; }
+async function run(label, fn){
+  busy(true, label);
+  try { return await fn(); }
+  catch(e){ toast(e.message || 'Algo salió mal', true); throw e; }
+  finally { busy(false); }
+}
+function infoBox(msg){
+  return new Promise(function(res){
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:20px';
+    d.innerHTML = '<div class="card" style="max-width:420px;width:100%;max-height:80vh;overflow:auto"><p style="font-size:15px;line-height:1.5;margin-bottom:16px">' + msg + '</p><button class="btn primary" style="width:100%">Entendido</button></div>';
+    d.addEventListener('click', function(e){ if(e.target === d || e.target.tagName === 'BUTTON'){ d.remove(); res(); } });
+    document.body.appendChild(d);
+  });
+}
+function confirmBox(msg, okLabel, danger){
+  return new Promise(function(res){
+    var d = document.createElement('div');
+    d.style.cssText = 'position:fixed;inset:0;z-index:100;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:20px';
+    d.innerHTML = '<div class="card" style="max-width:380px;width:100%"><p style="font-size:16px;margin-bottom:16px">' + msg + '</p><div class="row"><button class="btn" data-r="0" style="flex:1">Cancelar</button><button class="btn ' + (danger ? 'danger' : 'primary') + '" data-r="1" style="flex:1">' + esc(okLabel || 'Aceptar') + '</button></div></div>';
+    d.addEventListener('click', function(e){ var b = e.target.closest('[data-r]'); if(b){ d.remove(); res(b.dataset.r === '1'); } else if(e.target === d){ d.remove(); res(false); } });
+    document.body.appendChild(d);
+  });
+}
+
+/* ---------- hoja inferior (editor) ---------- */
+function openSheet(title, body, foot, onClose){
+  $('#sheet-title').textContent = title;
+  $('#sheet-body').innerHTML = body;
+  $('#sheet-foot').innerHTML = foot || '';
+  $('#sheet-foot').style.display = foot ? 'flex' : 'none';
+  $('#scrim').classList.add('on'); $('#sheet').classList.add('on');
+  CLOSE_CB = onClose || null;
+  $('#sheet-body').scrollTop = 0;
+}
+function closeSheet(){ $('#scrim').classList.remove('on'); $('#sheet').classList.remove('on'); if(CLOSE_CB){ var f = CLOSE_CB; CLOSE_CB = null; f(); } }
+$('#scrim').addEventListener('click', closeSheet);
+$('#sheet-x').addEventListener('click', closeSheet);
+document.addEventListener('keydown', function(e){ if(e.key === 'Escape') closeSheet(); });
+
+/* ---------- navegación ---------- */
+$('#tabs').addEventListener('click', function(e){
+  var b = e.target.closest('[data-tab]'); if(!b) return;
+  TAB = b.dataset.tab;
+  [].forEach.call(document.querySelectorAll('#tabs button'), function(x){ x.setAttribute('aria-current', x === b ? 'true' : 'false'); });
+  render(); window.scrollTo(0, 0);
+});
+function render(){
+  if(!S){ $('#view').innerHTML = '<div class="empty">Cargando…</div>'; return; }
+  ({ prod: viewProd, cat: viewCat, msg: viewMsg, biz: viewBiz })[TAB]();
+}
+function setState(st){ if(st) S = st; render(); }
+
+/* ================= PRODUCTOS ================= */
+function stockTag(p){
+  if(p.tipo === 'A pedido') return '<span class="tag warn">A pedido</span>';
+  if(p.cantidad == null) return '<span class="tag warn">Stock sin cargar</span>';
+  if(p.cantidad === 0) return '<span class="tag bad">Sin stock</span>';
+  return '<span class="tag ok">Stock ' + p.cantidad + '</span>';
+}
+function viewProd(){
+  var cats = S.categorias.map(function(c){ return c.nombre; });
+  var q = F.q.toLowerCase();
+  var list = S.productos.filter(function(p){
+    if(q && (p.nombre + ' ' + p.categoria).toLowerCase().indexOf(q) < 0) return false;
+    if(F.cat && p.categoria !== F.cat) return false;
+    if(F.chip === 'of') return pct_(p) > 0;
+    if(F.chip === 'np') return p.precio == null;
+    if(F.chip === 'ss') return p.tipo !== 'A pedido' && p.cantidad === 0;
+    if(F.chip === 'oc') return !p.visible;
+    return true;
+  });
+  var cnt = { of: 0, np: 0, ss: 0, oc: 0 };
+  S.productos.forEach(function(p){ if(pct_(p) > 0) cnt.of++; if(p.precio == null) cnt.np++; if(p.tipo !== 'A pedido' && p.cantidad === 0) cnt.ss++; if(!p.visible) cnt.oc++; });
+  var chip = function(k, t){ return '<button class="chip" data-chip="' + k + '" aria-pressed="' + (F.chip === k) + '">' + t + '</button>'; };
+  var h = '<div class="row" style="margin-bottom:10px"><div style="flex:1"><h2>Productos</h2><div class="hint">' + S.productos.length + ' en total · tocá uno para editarlo</div></div><button class="btn primary" id="p-new" type="button">＋ Nuevo</button></div>' +
+    '<div class="stack" style="margin-bottom:12px"><input type="search" id="p-q" placeholder="Buscar producto…" value="' + esc(F.q) + '">' +
+    '<select id="p-cat"><option value="">Todas las categorías</option>' + cats.map(function(c){ return '<option' + (F.cat === c ? ' selected' : '') + '>' + esc(c) + '</option>'; }).join('') + '</select>' +
+    '<div class="chips">' + chip('all', 'Todos') + chip('of', 'Ofertas (' + cnt.of + ')') + chip('np', 'Sin precio (' + cnt.np + ')') + chip('ss', 'Sin stock (' + cnt.ss + ')') + chip('oc', 'Ocultos (' + cnt.oc + ')') + '</div></div>';
+  if(!list.length) h += '<div class="empty">No hay productos con ese filtro.</div>';
+  else h += '<div class="list">' + list.map(function(p){
+    var f = final_(p);
+    var img = p.fotos[0] ? '<img loading="lazy" referrerpolicy="no-referrer" src="' + thumb(p.fotos[0], 160) + '" alt="">' : (p.videos[0] ? '<img loading="lazy" referrerpolicy="no-referrer" src="' + vthumb(p.videos[0], 160) + '" alt="">' : 'sin foto');
+    return '<div class="prod' + (p.visible ? '' : ' off') + '" data-id="' + esc(p.id) + '">' +
+      '<div class="th">' + img + '</div>' +
+      '<div class="info"><b>' + esc(cap(p.nombre)) + '</b><small>' + esc(p.categoria) + '</small><div class="tags">' + stockTag(p) + (pct_(p) > 0 ? '<span class="tag of">Oferta −' + pct_(p) + '%</span>' : '') + (!p.carpeta ? '<span class="tag">Sin carpeta</span>' : '') + (!p.visible && p.carpeta && p.precio == null ? '<span class="tag warn">Nuevo desde Drive</span>' : '') + (p.precio == null ? '<span class="tag bad">Sin precio</span>' : '') + (p.videos.length ? '<span class="tag">▶ video</span>' : '') + '</div></div>' +
+      '<div class="price">' + (ref_(p) != null ? '<s>' + money(ref_(p)) + '</s>' : '') + (f == null ? '' : money(f)) + '</div>' +
+      '<button class="sw" role="switch" aria-checked="' + p.visible + '" aria-label="Visible en la tienda" data-vis="' + esc(p.id) + '"></button></div>';
+  }).join('') + '</div>';
+  $('#view').innerHTML = h;
+  $('#p-new').onclick = function(){ editProduct(null); };
+  $('#p-q').oninput = function(e){ F.q = e.target.value; var pos = e.target.selectionStart; viewProd(); var i = $('#p-q'); i.focus(); i.setSelectionRange(pos, pos); };
+  $('#p-cat').onchange = function(e){ F.cat = e.target.value; viewProd(); };
+  [].forEach.call(document.querySelectorAll('[data-chip]'), function(b){ b.onclick = function(){ F.chip = b.dataset.chip; viewProd(); }; });
+  [].forEach.call(document.querySelectorAll('.prod'), function(el){ el.onclick = function(e){
+    var v = e.target.closest('[data-vis]');
+    if(v){ e.stopPropagation(); toggleVisible(v.dataset.vis); return; }
+    editProduct(el.dataset.id);
+  }; });
+}
+async function toggleVisible(id){
+  var p = S.productos.filter(function(x){ return x.id === id; })[0]; if(!p) return;
+  try { S = await run('Guardando…', function(){ return call('api_quick', id, 'visible', !p.visible); }); render(); toast(p.visible ? 'Oculto en la tienda' : 'Visible en la tienda'); } catch(e){}
+}
+
+function editProduct(id){
+  var p = id ? S.productos.filter(function(x){ return x.id === id; })[0] : null;
+  var isNew = !p;
+  p = p || { nombre: '', categoria: F.cat || (S.categorias[0] && S.categorias[0].nombre) || '', tipo: 'Inmediato', cantidad: null, costo: null, precio: null, oferta: 0, descripcion: '', descDrive: '', visible: true, fotos: [], videos: [] };
+  var catOpts = S.categorias.map(function(c){ return '<option' + (c.nombre === p.categoria ? ' selected' : '') + '>' + esc(c.nombre) + '</option>'; }).join('') + '<option value="__new">＋ Nueva categoría…</option>';
+  var body =
+    '<div class="stack">' +
+    '<div><label class="l" for="f-nombre">Nombre</label><input type="text" id="f-nombre" value="' + esc(cap(p.nombre)) + '" placeholder="Ej: Batería 50 tiros"></div>' +
+    '<div><label class="l" for="f-cat">Categoría</label><select id="f-cat">' + catOpts + '</select><input type="text" id="f-newcat" placeholder="Nombre de la nueva categoría" style="display:none;margin-top:8px"></div>' +
+    '<div><label class="l">Tipo de stock</label><div class="seg" id="f-tipo"><button type="button" data-v="Inmediato" aria-pressed="' + (p.tipo !== 'A pedido') + '">Stock inmediato</button><button type="button" data-v="A pedido" aria-pressed="' + (p.tipo === 'A pedido') + '">A pedido</button></div></div>' +
+    '<div class="grid2"><div id="w-cant"><label class="l" for="f-cant">Cantidad disponible</label><input type="number" id="f-cant" min="0" step="1" inputmode="numeric" value="' + (p.cantidad == null ? '' : p.cantidad) + '" placeholder="Sin cargar"></div>' +
+    '<div><label class="l" for="f-precio">Precio de venta ($)</label><input type="number" id="f-precio" min="0" step="1" inputmode="numeric" value="' + (p.precio == null ? '' : p.precio) + '" placeholder="Sin precio"></div></div>' +
+    '<div class="grid2"><div><label class="l" for="f-costo">Costo ($) · privado</label><input type="number" id="f-costo" min="0" step="1" inputmode="numeric" value="' + (p.costo == null ? '' : p.costo) + '"></div>' +
+    '<div><label class="l" for="f-lista">Precio de lista ($)</label><input type="number" id="f-lista" min="0" step="1" inputmode="numeric" value="' + (p.lista == null ? '' : p.lista) + '" placeholder="Opcional"></div></div>' +
+    '<div class="hint" style="margin-top:-4px">El precio de lista (ej: lo que sumarían los productos de un combo por separado) se muestra tachado si es mayor al precio de venta.</div>' +
+    '<div class="card" style="padding:12px"><div class="row"><div style="flex:1"><b>Oferta</b><div class="hint">Tacha el precio y muestra la banda de descuento</div></div><button class="sw" id="f-of-sw" type="button" role="switch" aria-checked="' + (p.oferta > 0) + '"></button></div>' +
+    '<div id="w-of" style="margin-top:10px;display:' + (p.oferta > 0 ? 'block' : 'none') + '"><div class="row"><div style="width:120px"><label class="l" for="f-of">Descuento %</label><input type="number" id="f-of" min="1" max="95" step="1" inputmode="numeric" value="' + (p.oferta > 0 ? p.oferta : 10) + '"></div><div id="f-ofprev" class="hint" style="flex:1;font-size:14px"></div></div></div></div>' +
+    '<div><label class="l" for="f-desc">Descripción corta</label><textarea id="f-desc" placeholder="' + esc(p.descDrive ? 'Se usa la del documento de Drive si la dejás vacía: ' + p.descDrive.slice(0, 120) : 'Opcional. Se muestra abajo de la foto.') + '">' + esc(p.descripcion) + '</textarea>' + (p.descDrive ? '<div class="hint" style="margin-top:4px">Hay un documento de descripción en Drive; si escribís acá, esto tiene prioridad.</div>' : '') + '</div>' +
+    '<div class="row"><div style="flex:1"><b>Visible en la tienda</b></div><button class="sw" id="f-vis" type="button" role="switch" aria-checked="' + p.visible + '"></button></div>' +
+    '<div id="w-media"></div>' +
+    (isNew ? '' : '<button class="btn danger" id="f-del" type="button">Eliminar producto</button>') +
+    '</div>';
+  var foot = '<button class="btn" id="f-cancel" type="button">Cancelar</button><button class="btn primary" id="f-save" type="button">Guardar</button>';
+  openSheet(isNew ? 'Nuevo producto' : 'Editar producto', body, foot);
+  var st = { tipo: p.tipo === 'A pedido' ? 'A pedido' : 'Inmediato', of: p.oferta > 0, vis: p.visible };
+  function sync(){
+    $('#w-cant').style.display = st.tipo === 'A pedido' ? 'none' : 'block';
+    var pr = parseFloat($('#f-precio').value), pc = parseFloat($('#f-of').value);
+    $('#f-ofprev').innerHTML = (st.of && pr > 0 && pc > 0) ? '<s style="color:var(--text3)">' + money(pr) + '</s> → <b style="color:var(--gold)">' + money(Math.round(pr * (1 - pc / 100))) + '</b>' : (st.of && !(pr > 0) ? 'Cargá un precio para ver el descuento.' : '');
+  }
+  $('#f-cat').onchange = function(e){ $('#f-newcat').style.display = e.target.value === '__new' ? 'block' : 'none'; if(e.target.value === '__new') $('#f-newcat').focus(); };
+  [].forEach.call(document.querySelectorAll('#f-tipo button'), function(b){ b.onclick = function(){ st.tipo = b.dataset.v; [].forEach.call(document.querySelectorAll('#f-tipo button'), function(x){ x.setAttribute('aria-pressed', x === b); }); sync(); }; });
+  $('#f-of-sw').onclick = function(){ st.of = !st.of; this.setAttribute('aria-checked', st.of); $('#w-of').style.display = st.of ? 'block' : 'none'; sync(); };
+  $('#f-vis').onclick = function(){ st.vis = !st.vis; this.setAttribute('aria-checked', st.vis); };
+  $('#f-precio').oninput = sync; $('#f-of').oninput = sync; sync();
+  $('#f-cancel').onclick = closeSheet;
+  if($('#f-del')) $('#f-del').onclick = async function(){
+    var ok = await confirmBox('¿Eliminar <b>' + esc(p.nombre) + '</b> de la tienda?<br><span class="hint">Se quita de la tienda y de la lista. La carpeta de Drive queda como está, salvo que la mandes a la papelera.</span>', 'Eliminar', true);
+    if(!ok) return;
+    var trash = await confirmBox('¿Mandar también la carpeta de Drive (fotos y videos) a la papelera?', 'Sí, a la papelera', true);
+    try { S = await run('Eliminando…', function(){ return call('api_deleteProduct', p.id, trash); }); closeSheet(); render(); toast('Producto eliminado'); } catch(e){}
+  };
+  $('#f-save').onclick = async function(){
+    var cat = $('#f-cat').value === '__new' ? $('#f-newcat').value.trim() : $('#f-cat').value;
+    var data = { id: p.id || '', nombre: $('#f-nombre').value.trim(), categoria: cat, tipo: st.tipo, cantidad: $('#f-cant').value, costo: $('#f-costo').value, precio: $('#f-precio').value, lista: $('#f-lista').value,
+      oferta: st.of ? $('#f-of').value : 0, descripcion: $('#f-desc').value.trim(), visible: st.vis };
+    if(!data.nombre){ toast('Escribí el nombre del producto', true); return; }
+    if(!data.categoria){ toast('Elegí una categoría', true); return; }
+    if(st.of && !(parseFloat($('#f-precio').value) > 0)){ toast('Para una oferta cargá primero el precio', true); return; }
+    try {
+      var r = await run('Guardando…', function(){ return call('api_saveProduct', data); });
+      S = r; render();
+      if(isNew){ toast('Producto creado. Ahora podés subirle fotos y videos.'); editProduct(r.savedId); } else { closeSheet(); toast('Guardado'); }
+    } catch(e){}
+  };
+  if(isNew) $('#w-media').innerHTML = '<label class="l">Fotos y videos</label><div class="hint">Guardá el producto y después vas a poder subir fotos y videos.</div>';
+  else loadMedia(p);
+}
+
+async function loadMedia(p){
+  var box = $('#w-media'); if(!box) return;
+  box.innerHTML = '<label class="l">Fotos y videos</label><div class="hint">Cargando…</div>';
+  try {
+    var r = await call('api_listMedia', p.id);
+    if(!p.carpeta && !(S.productos.filter(function(x){ return x.id === p.id; })[0] || {}).carpeta){ drawLink(p, r.libres || []); return; }
+    drawMedia(p, r.media, r.carpetaUrl);
+  } catch(e){ box.innerHTML = '<label class="l">Fotos y videos</label><div class="hint">No pude leer la carpeta: ' + esc(e.message) + '</div>'; }
+}
+function drawLink(p, libres){
+  var box = $('#w-media'); if(!box) return;
+  var h = '<label class="l">Fotos y videos</label><div class="hint" style="margin-bottom:8px">Este producto todavía no tiene carpeta en Drive. Podés vincular una existente o subir un archivo (se crea la carpeta sola).</div>';
+  if(libres.length) h += '<div class="row"><select id="f-link" style="flex:1"><option value="">Elegir carpeta de Drive…</option>' + libres.map(function(f){ return '<option value="' + esc(f.id) + '">' + esc(f.cat + ' › ' + f.name) + '</option>'; }).join('') + '</select><button class="btn sm" id="f-linkgo" type="button">Vincular</button></div>';
+  h += '<div class="row wrapx" style="margin-top:10px"><label class="btn sm primary" style="cursor:pointer">＋ Subir foto o video<input type="file" id="f-file" accept="image/*,video/*" multiple hidden></label></div><div id="f-prog" class="hint" style="margin-top:6px;color:var(--gold)"></div>';
+  box.innerHTML = h;
+  var go = $('#f-linkgo');
+  if(go) go.onclick = async function(){
+    var v = $('#f-link').value; if(!v){ toast('Elegí una carpeta', true); return; }
+    try { S = await run('Vinculando…', function(){ return call('api_linkFolder', p.id, v); }); render(); loadMedia(p); toast('Carpeta vinculada'); } catch(e){}
+  };
+  var fi = $('#f-file');
+  if(fi) fi.onchange = async function(){
+    var files = [].slice.call(fi.files); fi.value = '';
+    for(var i = 0; i < files.length; i++){ try { await uploadOne(p, files[i], i + 1, files.length); } catch(e){ toast(e.message, true); break; } }
+    loadMedia(p);
+  };
+}
+function drawMedia(p, media, carpetaUrl){
+  var box = $('#w-media'); if(!box) return;
+  var cover = (S.productos.filter(function(x){ return x.id === p.id; })[0] || p).fotos[0];
+  var h = '<label class="l">Fotos y videos</label>';
+  if(!media.length) h += '<div class="hint" style="margin-bottom:8px">Todavía no hay archivos. La primera foto es la portada de la tienda.</div>';
+  else h += '<div class="media">' + media.map(function(m){
+    return '<div class="mt"><img loading="lazy" referrerpolicy="no-referrer" src="' + (m.video ? vthumb(m.id, 240) : thumb(m.id, 240)) + '" alt="">' +
+      (m.video ? '<span class="vb">VIDEO</span>' : (m.id === cover ? '<span class="cv">PORTADA</span>' : '')) +
+      '<div class="ac">' + (!m.video && m.id !== cover ? '<button type="button" title="Usar como portada" data-cover="' + m.id + '">★</button>' : '') + '<button type="button" title="Borrar" data-del="' + m.id + '">🗑</button></div></div>';
+  }).join('') + '</div>';
+  h += '<div class="row wrapx" style="margin-top:10px"><label class="btn sm primary" style="cursor:pointer">＋ Subir foto o video<input type="file" id="f-file" accept="image/*,video/*" multiple hidden></label>' + (carpetaUrl ? '<a class="btn sm" href="' + esc(carpetaUrl) + '" target="_blank" rel="noopener">Abrir carpeta en Drive</a>' : '') + '</div>' +
+    '<div class="hint" style="margin-top:6px">Las fotos se achican solas. Los videos de más de 15 MB subilos directo a la carpeta de Drive y tocá “Sincronizar”.</div><div id="f-prog" class="hint" style="margin-top:6px;color:var(--gold)"></div>';
+  box.innerHTML = h;
+  [].forEach.call(box.querySelectorAll('[data-cover]'), function(b){ b.onclick = async function(){ try { S = await run('Guardando…', function(){ return call('api_makeCover', p.id, b.dataset.cover); }); render(); loadMedia(p); toast('Portada actualizada'); } catch(e){} }; });
+  [].forEach.call(box.querySelectorAll('[data-del]'), function(b){ b.onclick = async function(){
+    if(!(await confirmBox('¿Borrar este archivo? Va a la papelera de Drive.', 'Borrar', true))) return;
+    try { var r = await run('Borrando…', function(){ return call('api_deleteMedia', p.id, b.dataset.del); }); S = r.estado; render(); drawMedia(p, r.media, carpetaUrl); toast('Archivo borrado'); } catch(e){}
+  }; });
+  var fi = $('#f-file');
+  if(fi) fi.onchange = async function(){
+    var files = [].slice.call(fi.files); fi.value = '';
+    for(var i = 0; i < files.length; i++){
+      try { await uploadOne(p, files[i], i + 1, files.length); } catch(e){ toast(e.message, true); break; }
+    }
+    $('#f-prog') && ($('#f-prog').textContent = '');
+    loadMedia(p);
+  };
+}
+
+/* ---------- subida de archivos (por pedazos) ---------- */
+function loadImage(file){
+  return new Promise(function(ok, no){
+    var url = URL.createObjectURL(file), img = new Image();
+    img.onload = function(){ ok({ img: img, url: url }); };
+    img.onerror = function(){ URL.revokeObjectURL(url); no(new Error('No pude leer la imagen. Si es HEIC, subila a la carpeta de Drive o sacale la foto en JPG.')); };
+    img.src = url;
+  });
+}
+async function shrink(file, max, q){
+  var li = await loadImage(file), img = li.img;
+  var w = img.naturalWidth, h = img.naturalHeight, k = Math.min(1, max / Math.max(w, h));
+  var c = document.createElement('canvas'); c.width = Math.round(w * k); c.height = Math.round(h * k);
+  var ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height); ctx.drawImage(img, 0, 0, c.width, c.height);
+  URL.revokeObjectURL(li.url);
+  return await new Promise(function(ok, no){ c.toBlob(function(b){ b ? ok(b) : no(new Error('No pude achicar la foto.')); }, 'image/jpeg', q); });
+}
+function toB64(blob){
+  return new Promise(function(ok, no){ var r = new FileReader(); r.onload = function(){ ok(String(r.result).split(',')[1] || ''); }; r.onerror = function(){ no(new Error('No pude leer el archivo.')); }; r.readAsDataURL(blob); });
+}
+async function uploadOne(p, file, n, total){
+  var prog = function(t){ var e = $('#f-prog'); if(e) e.textContent = t; };
+  var blob = file, name = file.name || 'archivo', mime = file.type || 'application/octet-stream';
+  var isImg = mime.indexOf('image/') === 0, isVid = mime.indexOf('video/') === 0;
+  if(!isImg && !isVid) throw new Error('Solo se pueden subir fotos o videos.');
+  if(isImg && mime !== 'image/gif'){ prog('Achicando foto ' + n + '/' + total + '…'); blob = await shrink(file, 1800, 0.86); mime = 'image/jpeg'; name = name.replace(/\.[^.]+$/, '') + '.jpg'; }
+  if(blob.size > 15 * 1024 * 1024) throw new Error('"' + name + '" pesa ' + (blob.size / 1048576).toFixed(1) + ' MB. Subilo directo a la carpeta de Drive y tocá Sincronizar.');
+  var b64 = await toB64(blob);
+  var sid = 'u' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
+  var CH = 1200000, parts = Math.max(1, Math.ceil(b64.length / CH));
+  for(var i = 0; i < parts; i++){
+    prog('Subiendo ' + n + '/' + total + ' · ' + Math.round((i / parts) * 100) + '%');
+    await call('api_uploadChunk', sid, i, b64.slice(i * CH, (i + 1) * CH));
+  }
+  prog('Guardando en Drive…');
+  var r = await call('api_uploadFinish', p.id, sid, parts, name, mime, blob.size);
+  S = r.estado; render();
+}
+
+/* ================= CATEGORÍAS ================= */
+var CATS = null;
+function viewCat(){
+  if(!CATS) CATS = S.categorias.map(function(c){ return { anterior: c.nombre, nombre: c.nombre, subtitulo: c.subtitulo, icono: c.icono, color: c.color, visible: c.visible }; });
+  var combos = CATS.filter(function(c){ return c.nombre.toLowerCase() === 'combos'; })[0];
+  var h = '<h2>Categorías</h2><div class="hint" style="margin-bottom:12px">Las categorías salen de las carpetas de Drive. Acá las podés renombrar, ocultar, ordenar o agregar.</div>' +
+    '<div class="card combos" style="margin-bottom:14px"><div style="flex:1"><b style="font-size:17px">Sección Combos</b><div class="hint">' + (combos && combos.visible ? 'Activada: se ve en la tienda.' : 'Desactivada: no aparece en la tienda.') + '</div></div><button class="sw" id="c-combos" role="switch" aria-checked="' + !!(combos && combos.visible) + '" type="button"></button></div>' +
+    '<div class="list">' + CATS.map(function(c, i){
+      return '<div class="card cat" data-i="' + i + '"><div class="top"><span class="dot" style="background:' + esc(c.color) + '"></span><input type="text" data-k="nombre" value="' + esc(c.nombre) + '" aria-label="Nombre de la categoría"><button class="sw" role="switch" aria-checked="' + c.visible + '" data-k="visible" type="button" aria-label="Visible"></button></div>' +
+        '<input type="text" data-k="subtitulo" value="' + esc(c.subtitulo) + '" placeholder="Frase corta (ej: Efectos en cadena)" aria-label="Subtítulo">' +
+        '<div class="row"><select data-k="icono" aria-label="Ícono" style="flex:1">' + ICONS.map(function(ic){ return '<option value="' + ic[0] + '"' + (ic[0] === c.icono ? ' selected' : '') + '>' + ic[1] + '</option>'; }).join('') + '</select><input type="color" data-k="color" value="' + esc(c.color) + '" aria-label="Color">' +
+        '<button class="btn sm" data-up type="button" aria-label="Subir">↑</button><button class="btn sm" data-down type="button" aria-label="Bajar">↓</button><button class="btn sm danger" data-rm type="button" aria-label="Quitar">🗑</button></div></div>';
+    }).join('') + '</div>' +
+    '<div class="row" style="margin-top:14px"><button class="btn" id="c-add" type="button">＋ Agregar categoría</button><div class="sp" style="flex:1"></div><button class="btn primary" id="c-save" type="button">Guardar categorías</button></div>';
+  $('#view').innerHTML = h;
+  $('#c-combos').onclick = async function(){
+    var on = !(combos && combos.visible);
+    if(!combos){ CATS.push({ anterior: '', nombre: 'Combos', subtitulo: 'Todo armado', icono: 'combo', color: '#4ADE80', visible: on }); } else combos.visible = on;
+    await saveCats(on ? 'Sección Combos activada' : 'Sección Combos desactivada');
+  };
+  $('#c-add').onclick = function(){ readCatInputs(); CATS.push({ anterior: '', nombre: 'Nueva categoría', subtitulo: '', icono: 'estrella', color: '#FFC24D', visible: true }); viewCat(); };
+  $('#c-save').onclick = function(){ readCatInputs(); saveCats('Categorías guardadas'); };
+  [].forEach.call(document.querySelectorAll('.cat'), function(el){
+    var i = +el.dataset.i;
+    el.querySelector('[data-k=visible]').onclick = function(){ readCatInputs(); CATS[i].visible = !CATS[i].visible; viewCat(); };
+    el.querySelector('[data-up]').onclick = function(){ readCatInputs(); if(i > 0){ var t = CATS[i]; CATS[i] = CATS[i - 1]; CATS[i - 1] = t; viewCat(); } };
+    el.querySelector('[data-down]').onclick = function(){ readCatInputs(); if(i < CATS.length - 1){ var t = CATS[i]; CATS[i] = CATS[i + 1]; CATS[i + 1] = t; viewCat(); } };
+    el.querySelector('[data-rm]').onclick = async function(){
+      readCatInputs();
+      var n = S.productos.filter(function(p){ return p.categoria === CATS[i].anterior; }).length;
+      if(n){ toast('"' + CATS[i].nombre + '" tiene ' + n + ' producto(s). Movelos a otra categoría o ocultala con el interruptor.', true); return; }
+      if(!(await confirmBox('¿Quitar la categoría <b>' + esc(CATS[i].nombre) + '</b>?', 'Quitar', true))) return;
+      CATS.splice(i, 1); await saveCats('Categoría quitada');
+    };
+    el.querySelector('[data-k=color]').oninput = function(e){ el.querySelector('.dot').style.background = e.target.value; };
+  });
+}
+function readCatInputs(){
+  [].forEach.call(document.querySelectorAll('.cat'), function(el){
+    var i = +el.dataset.i, c = CATS[i]; if(!c) return;
+    c.nombre = el.querySelector('[data-k=nombre]').value.trim(); c.subtitulo = el.querySelector('[data-k=subtitulo]').value.trim();
+    c.icono = el.querySelector('[data-k=icono]').value; c.color = el.querySelector('[data-k=color]').value;
+  });
+}
+async function saveCats(msg){
+  try { S = await run('Guardando…', function(){ return call('api_saveCategories', CATS); }); CATS = null; render(); toast(msg); } catch(e){ render(); }
+}
+
+/* ================= MENSAJES ================= */
+var MSG_SAMPLE = { productos: '• 2 x Batería 50 tiros — $24.000\n• 1 x Torta 36 tiros (a pedido) — $18.000', total: '$42.000', cantidad: '2', producto: 'Batería 50 tiros', nota: '', precio: '$12.000', subtotal: '$24.000', oferta: '−10%', nombre: 'Juan Pérez', contacto: '264 555-1234', mensaje: 'Quiero algo para el cierre de una fiesta de 15 años.' };
+function fill(tpl, v){ return String(tpl).replace(/\{(\w+)\}/g, function(m, k){ return v[k] !== undefined ? v[k] : m; }); }
+var MSGS = [
+  { k: 'mensaje_pedido', t: 'Mensaje del pedido (carrito)', d: 'Es lo que se manda por WhatsApp cuando alguien termina su pedido.', ch: ['productos', 'total'], rows: 7 },
+  { k: 'formato_linea', t: 'Formato de cada producto del pedido', d: 'Se repite una vez por producto y se pega en {productos}.', ch: ['cantidad', 'producto', 'nota', 'precio', 'subtotal', 'oferta'], rows: 2 },
+  { k: 'mensaje_contacto', t: 'Mensaje del formulario “Contacto”', d: 'Lo que se manda cuando alguien completa el formulario de contacto.', ch: ['nombre', 'contacto', 'mensaje'], rows: 5 },
+  { k: 'mensaje_consulta', t: 'Mensaje de “Consultar” un producto', d: 'Se usa en los productos sin precio y en el botón de consulta.', ch: ['producto'], rows: 3 }
+];
+function viewMsg(){
+  var h = '<h2>Mensajes de WhatsApp</h2><div class="hint" style="margin-bottom:12px">Tocá una palabra entre llaves para insertarla donde tengas el cursor. Abajo ves cómo queda.</div><div class="stack">' +
+    MSGS.map(function(m){
+      return '<div class="card"><label class="l" for="m-' + m.k + '" style="font-size:14px;color:var(--text)">' + m.t + '</label><div class="hint" style="margin-bottom:8px">' + m.d + '</div>' +
+        '<textarea id="m-' + m.k + '" rows="' + m.rows + '" style="min-height:0">' + esc(S.ajustes[m.k]) + '</textarea>' +
+        '<div class="pchips">' + m.ch.map(function(c){ return '<button type="button" class="pchip" data-ins="' + m.k + '" data-v="{' + c + '}">{' + c + '}</button>'; }).join('') + '</div>' +
+        '<div class="hint" style="margin:8px 0 4px">Vista previa</div><div class="preview" id="pv-' + m.k + '"></div>' +
+        '<button type="button" class="btn sm" style="margin-top:10px" data-reset="' + m.k + '">Restaurar el original</button></div>';
+    }).join('') + '<button class="btn primary" id="m-save" type="button">Guardar mensajes</button></div>';
+  $('#view').innerHTML = h;
+  function pv(){
+    var line = fill($('#m-formato_linea').value, MSG_SAMPLE);
+    var v = Object.assign({}, MSG_SAMPLE, { productos: line + '\n' + line.replace('2', '1').replace('Batería 50 tiros', 'Torta 36 tiros') });
+    MSGS.forEach(function(m){
+      var val = $('#m-' + m.k).value;
+      $('#pv-' + m.k).textContent = m.k === 'formato_linea' ? fill(val, MSG_SAMPLE) : fill(val, v);
+    });
+  }
+  MSGS.forEach(function(m){ $('#m-' + m.k).oninput = pv; });
+  [].forEach.call(document.querySelectorAll('[data-ins]'), function(b){ b.onclick = function(){
+    var ta = $('#m-' + b.dataset.ins), s = ta.selectionStart == null ? ta.value.length : ta.selectionStart, e = ta.selectionEnd == null ? s : ta.selectionEnd;
+    ta.value = ta.value.slice(0, s) + b.dataset.v + ta.value.slice(e); ta.focus(); ta.setSelectionRange(s + b.dataset.v.length, s + b.dataset.v.length); pv();
+  }; });
+  [].forEach.call(document.querySelectorAll('[data-reset]'), function(b){ b.onclick = function(){ $('#m-' + b.dataset.reset).value = S.defaults[b.dataset.reset]; pv(); }; });
+  $('#m-save').onclick = async function(){
+    var o = {}; MSGS.forEach(function(m){ o[m.k] = $('#m-' + m.k).value; });
+    if(o.mensaje_pedido.indexOf('{productos}') < 0 && !(await confirmBox('El mensaje del pedido no incluye <b>{productos}</b>: no se vería qué pidió la persona. ¿Guardar igual?', 'Guardar igual'))) return;
+    try { S = await run('Guardando…', function(){ return call('api_saveSettings', o); }); render(); toast('Mensajes guardados'); } catch(e){}
+  };
+  pv();
+}
+
+/* ================= NEGOCIO ================= */
+function viewBiz(){
+  var a = S.ajustes;
+  $('#view').innerHTML = '<h2>Datos del negocio</h2><div class="hint" style="margin-bottom:12px">Se muestran en la sección Contacto de la tienda y en los botones de WhatsApp.</div><div class="stack">' +
+    '<div class="card stack"><div><label class="l" for="b-wa">WhatsApp (con código de país, solo números)</label><input type="tel" id="b-wa" inputmode="numeric" value="' + esc(a.whatsapp) + '" placeholder="5492646063960"><div class="hint" style="margin-top:4px">Argentina celular: 549 + característica + número (sin 0 ni 15).</div></div>' +
+    '<div><label class="l" for="b-mail">Email</label><input type="email" id="b-mail" value="' + esc(a.email) + '"></div>' +
+    '<div><label class="l" for="b-ig">Instagram (usuario)</label><input type="text" id="b-ig" value="' + esc(a.instagram) + '" placeholder="pyrox_sj"></div>' +
+    '<div><label class="l" for="b-hor">Horarios</label><input type="text" id="b-hor" value="' + esc(a.horarios) + '" placeholder="8 a 22 h"></div></div>' +
+    '<div class="card"><div class="row"><div style="flex:1"><b>Ocultar productos sin stock</b><div class="hint">Si está apagado, aparecen con la etiqueta “Sin stock”.</div></div><button class="sw" id="b-ss" role="switch" aria-checked="' + (a.ocultar_sin_stock === 'SÍ') + '" type="button"></button></div></div>' +
+    '<button class="btn primary" id="b-save" type="button">Guardar datos</button>' +
+    '<div class="card"><b>Accesos</b><div class="linkrow"><a href="' + esc(S.sheetUrl) + '" target="_blank" rel="noopener">Abrir la hoja de cálculo</a><a href="' + esc(S.rootUrl) + '" target="_blank" rel="noopener">Abrir la carpeta de fotos y videos</a><a href="' + esc(S.siteUrl) + '" target="_blank" rel="noopener">Ver la tienda</a></div>' +
+    '<div class="note">Cuando guardás algo acá, la hoja se actualiza al instante y la tienda lo muestra en unos minutos (Google refresca la hoja publicada cada ~5 minutos).</div></div></div>';
+  $('#b-ss').onclick = function(){ this.setAttribute('aria-checked', this.getAttribute('aria-checked') !== 'true'); };
+  $('#b-save').onclick = async function(){
+    var o = { whatsapp: $('#b-wa').value, email: $('#b-mail').value.trim(), instagram: $('#b-ig').value.trim(), horarios: $('#b-hor').value.trim(), ocultar_sin_stock: $('#b-ss').getAttribute('aria-checked') === 'true' ? 'SÍ' : 'NO' };
+    try { S = await run('Guardando…', function(){ return call('api_saveSettings', o); }); render(); toast('Datos guardados'); } catch(e){}
+  };
+}
+
+/* ================= SINCRONIZAR / ARRANQUE ================= */
+$('#btn-sync').onclick = async function(){
+  try {
+    var r = await run('Leyendo la carpeta de Drive…', function(){ return call('api_sync'); });
+    S = r.estado; CATS = null; render();
+    var q = r.resumen, extra = [];
+    if(q.nuevosOcultos && q.nuevosOcultos.length) extra.push('<b>Carpetas de Drive sin producto en la hoja</b> (se crearon ocultas, completales el precio o borralas):<br>' + q.nuevosOcultos.map(esc).join(', '));
+    if(q.sinCarpeta && q.sinCarpeta.length) extra.push('<b>Productos de la hoja sin carpeta en Drive</b> (no tienen fotos; podés vincularlos desde su ficha):<br>' + q.sinCarpeta.map(function(x){ return esc(cap(x)); }).join(', '));
+    toast('Listo: ' + q.productos + ' productos · ' + q.vinculados + ' vinculados con Drive');
+    if(extra.length) await infoBox(extra.join('<br><br>'));
+  } catch(e){}
+};
+async function start(){
+  render();
+  try { S = await call('api_bootstrap'); render(); }
+  catch(e){ if(!/sesi|ingres|cuenta/i.test(e.message)) $('#view').innerHTML = '<div class="empty">No pude cargar el panel.<br>' + esc(e.message) + '<br><br><button class="btn" onclick="start()">Reintentar</button></div>'; }
+}
+if(tokenOk(TOKEN)) start(); else { render(); }
+if('serviceWorker' in navigator && location.protocol === 'https:'){ addEventListener('load', function(){ navigator.serviceWorker.register('sw.js').catch(function(){}); }); }
+</script>
+</body>
+</html>
