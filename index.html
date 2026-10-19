@@ -577,6 +577,8 @@ const fill = (t, v) => String(t).replace(/\{(\w+)\}/g, (m, k) => v[k] !== undefi
 const gid = s => /^[\w-]{10,}$/.test(s) ? s : '';
 const gimg = (id, w) => `https://lh3.googleusercontent.com/d/${gid(id)}=w${w}`;
 const gthumb = (id, w) => `https://drive.google.com/thumbnail?id=${gid(id)}&sz=w${w}`;
+// Clave pública de Google (solo Drive API y solo desde esta página): permite reproducir los videos de Drive con el reproductor del celular
+const DRIVE_KEY = 'AIzaSyDlNLOrXgJxgDav_6whr1aV7bi7Obe72_o';
 const WA = () => String(CFG.whatsapp || DEF.whatsapp).replace(/\D/g, '');
 
 function parseCSV(t){
@@ -741,7 +743,7 @@ function openVideo(id){
   const box = $('#vp-box');
   box.innerHTML = '';
   const v = document.createElement('video');
-  v.src = `https://drive.usercontent.google.com/download?id=${gid(id)}&export=download&confirm=t`;
+  v.src = `https://www.googleapis.com/drive/v3/files/${gid(id)}?alt=media&key=${DRIVE_KEY}`;
   v.poster = gthumb(id, 1100);
   v.controls = true; v.autoplay = true; v.playsInline = true; v.preload = 'metadata';
   v.setAttribute('playsinline', ''); v.setAttribute('webkit-playsinline', '');
