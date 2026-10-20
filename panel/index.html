@@ -39,6 +39,7 @@ header.top .wrap{display:flex;align-items:center;gap:10px}
 main{padding-top:16px}
 h2{font-size:22px;letter-spacing:-.02em;margin-bottom:4px}
 .gd{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:12px 0;border-top:.5px solid var(--line)}.gd .gt{min-width:0;flex:1}.gd .gt b{display:block;font-size:15.5px}.gd .gt span{display:block;color:var(--text3);font-size:13px;line-height:1.35}.gd .ga{display:flex;gap:8px;flex:none}.gd .btn{text-decoration:none}
+#guide{position:fixed;inset:0;z-index:60;background:var(--bg,#0B0A14);display:none;flex-direction:column;padding-top:env(safe-area-inset-top,0px)}#guide.on{display:flex}.gbar{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:.5px solid var(--line)}.gbar b{font-size:15px;color:var(--text2)}#g-frame{flex:1;width:100%;border:0;background:#0B0A14}
 .hint{color:var(--text3);font-size:13.5px}
 .card{background:var(--surface);border-radius:18px;padding:16px;box-shadow:inset 0 0 0 .5px var(--line)}
 .stack{display:flex;flex-direction:column;gap:12px}
@@ -159,6 +160,7 @@ input[type=color]{width:42px;height:38px;padding:2px;border-radius:10px;backgrou
   <div class="body" id="sheet-body"></div>
   <footer id="sheet-foot"></footer>
 </div></div>
+<div id="guide" role="dialog" aria-modal="true" aria-label="Guía de uso"><div class="gbar"><button class="btn sm" id="g-back" type="button">← Volver al panel</button><b id="g-title"></b></div><iframe id="g-frame" sandbox="allow-scripts" title="Guía"></iframe></div>
 <div id="toast" role="status"></div>
 <div id="busy"><div class="spin"></div><div id="busy-t">Trabajando…</div></div>
 
@@ -218,6 +220,7 @@ function call(fn){
   }, function(){ throw new Error('No hay conexión con el servidor. Revisá tu internet.'); });
 }
 $('#btn-out').onclick = function(){
+  GKEY = null; try { $('#guide').classList.remove('on'); $('#g-frame').srcdoc = ''; } catch(e){}
   TOKEN = ''; S = null; try { sessionStorage.removeItem('pyrox_tk'); } catch(e){}
   try { google.accounts.id.disableAutoSelect(); } catch(e){}
   $('#view').innerHTML = ''; showLogin('');
@@ -583,17 +586,48 @@ function viewBiz(){
     '<div><label class="l" for="b-hor">Horarios</label><input type="text" id="b-hor" value="' + esc(a.horarios) + '" placeholder="8 a 22 h"></div></div>' +
     '<div class="card"><div class="row"><div style="flex:1"><b>Ocultar productos sin stock</b><div class="hint">Si está apagado, aparecen con la etiqueta “Sin stock”.</div></div><button class="sw" id="b-ss" role="switch" aria-checked="' + (a.ocultar_sin_stock === 'SÍ') + '" type="button"></button></div></div>' +
     '<button class="btn primary" id="b-save" type="button">Guardar datos</button>' +
-    '<div class="card" id="b-guias"><b>Guías de uso</b><div class="hint" style="margin:2px 0 10px">Cómo usar el panel y la tienda, paso a paso. Se ven bien en el celu y en la compu.</div>' +
-    '<div class="gd"><div class="gt"><b>Guía del panel de servicio</b><span>Productos, ofertas, combos, mensajes y fotos</span></div><div class="ga"><a class="btn sm primary" href="guias/panel.html">Abrir</a><a class="btn sm" href="guias/guia-panel-pyrox.pdf" target="_blank" rel="noopener">PDF</a></div></div>' +
-    '<div class="gd"><div class="gt"><b>Guía de la tienda</b><span>Cómo compra un cliente, de punta a punta</span></div><div class="ga"><a class="btn sm primary" href="guias/tienda.html">Abrir</a><a class="btn sm" href="guias/guia-tienda-pyrox.pdf" target="_blank" rel="noopener">PDF</a></div></div></div>' +
+    '<div class="card" id="b-guias"><b>Guías de uso</b><div class="hint" style="margin:2px 0 10px">Cómo usar el panel y la tienda, paso a paso. Solo se ven con tu sesión iniciada.</div>' +
+    '<div class="gd"><div class="gt"><b>Guía del panel de servicio</b><span>Productos, ofertas, combos, mensajes y fotos</span></div><div class="ga"><button class="btn sm primary" type="button" data-guia="panel">Abrir</button></div></div>' +
+    '<div class="gd"><div class="gt"><b>Guía de la tienda</b><span>Cómo compra un cliente, de punta a punta</span></div><div class="ga"><button class="btn sm primary" type="button" data-guia="tienda">Abrir</button></div></div></div>' +
     '<div class="card"><b>Accesos</b><div class="linkrow"><a href="' + esc(S.sheetUrl) + '" target="_blank" rel="noopener">Abrir la hoja de cálculo</a><a href="' + esc(S.rootUrl) + '" target="_blank" rel="noopener">Abrir la carpeta de fotos y videos</a><a href="' + esc(S.siteUrl) + '" target="_blank" rel="noopener">Ver la tienda</a></div>' +
     '<div class="note">Cuando guardás algo acá, la hoja se actualiza al instante y la tienda lo muestra en unos minutos (Google refresca la hoja publicada cada ~5 minutos).</div></div></div>';
+  [].forEach.call(document.querySelectorAll('[data-guia]'), function(x){ x.onclick = function(){ openGuide(x.dataset.guia); }; });
   $('#b-ss').onclick = function(){ this.setAttribute('aria-checked', this.getAttribute('aria-checked') !== 'true'); };
   $('#b-save').onclick = async function(){
     var o = { whatsapp: $('#b-wa').value, email: $('#b-mail').value.trim(), instagram: $('#b-ig').value.trim(), horarios: $('#b-hor').value.trim(), ocultar_sin_stock: $('#b-ss').getAttribute('aria-checked') === 'true' ? 'SÍ' : 'NO' };
     try { S = await run('Guardando…', function(){ return call('api_saveSettings', o); }); render(); toast('Datos guardados'); } catch(e){}
   };
 }
+
+
+/* ================= GUÍAS (cifradas: solo con sesión iniciada) ================= */
+var GKEY = null, GURL = null;
+function b64u8(b){ var s = atob(b), a = new Uint8Array(s.length); for(var i = 0; i < s.length; i++) a[i] = s.charCodeAt(i); return a; }
+var GPARTS = { panel: 6, tienda: 6 };
+async function guideBytes(n){
+  if(!GKEY){ var k = await call('api_guiaKey'); GKEY = await crypto.subtle.importKey('raw', b64u8(k), 'AES-GCM', false, ['decrypt']); }
+  var parts = [], i;
+  for(i = 0; i < GPARTS[n]; i++) parts.push(fetch('guias/' + n + '-' + i + '.bin?v=1').then(function(r){ if(!r.ok) throw new Error('No pude descargar la guía.'); return r.arrayBuffer(); }));
+  var bufs = await Promise.all(parts), len = 0; bufs.forEach(function(x){ len += x.byteLength; });
+  var buf = new Uint8Array(len), off = 0; bufs.forEach(function(x){ buf.set(new Uint8Array(x), off); off += x.byteLength; });
+  try { return new Uint8Array(await crypto.subtle.decrypt({ name: 'AES-GCM', iv: buf.slice(0, 12) }, GKEY, buf.slice(12))); }
+  catch(e){ GKEY = null; throw new Error('No pude abrir la guía. Probá de nuevo.'); }
+}
+var GTITLES = { panel: 'Guía del panel de servicio', tienda: 'Guía de la tienda' };
+async function openGuide(n){
+  try {
+    var bytes = await run('Abriendo la guía…', function(){ return guideBytes(n); });
+    $('#g-title').textContent = GTITLES[n]; $('#g-frame').dataset.g = n;
+    $('#g-frame').srcdoc = new TextDecoder().decode(bytes);
+    $('#guide').classList.add('on');
+  } catch(e){}
+}
+function closeGuide(){ $('#guide').classList.remove('on'); $('#g-frame').srcdoc = ''; }
+$('#g-back').onclick = closeGuide;
+window.addEventListener('message', function(e){
+  if(e.source !== $('#g-frame').contentWindow || !e.data) return;
+  if(e.data.pyroxGuide === 'close') closeGuide();
+});
 
 /* ================= SINCRONIZAR / ARRANQUE ================= */
 $('#btn-sync').onclick = async function(){
