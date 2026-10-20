@@ -38,6 +38,7 @@ header.top .wrap{display:flex;align-items:center;gap:10px}
 .btn[disabled]{opacity:.45;pointer-events:none}
 main{padding-top:16px}
 h2{font-size:22px;letter-spacing:-.02em;margin-bottom:4px}
+.gd{display:flex;align-items:center;gap:12px;justify-content:space-between;padding:12px 0;border-top:.5px solid var(--line)}.gd .gt{min-width:0;flex:1}.gd .gt b{display:block;font-size:15.5px}.gd .gt span{display:block;color:var(--text3);font-size:13px;line-height:1.35}.gd .ga{display:flex;gap:8px;flex:none}.gd .btn{text-decoration:none}
 .hint{color:var(--text3);font-size:13.5px}
 .card{background:var(--surface);border-radius:18px;padding:16px;box-shadow:inset 0 0 0 .5px var(--line)}
 .stack{display:flex;flex-direction:column;gap:12px}
@@ -582,6 +583,9 @@ function viewBiz(){
     '<div><label class="l" for="b-hor">Horarios</label><input type="text" id="b-hor" value="' + esc(a.horarios) + '" placeholder="8 a 22 h"></div></div>' +
     '<div class="card"><div class="row"><div style="flex:1"><b>Ocultar productos sin stock</b><div class="hint">Si está apagado, aparecen con la etiqueta “Sin stock”.</div></div><button class="sw" id="b-ss" role="switch" aria-checked="' + (a.ocultar_sin_stock === 'SÍ') + '" type="button"></button></div></div>' +
     '<button class="btn primary" id="b-save" type="button">Guardar datos</button>' +
+    '<div class="card" id="b-guias"><b>Guías de uso</b><div class="hint" style="margin:2px 0 10px">Cómo usar el panel y la tienda, paso a paso. Se ven bien en el celu y en la compu.</div>' +
+    '<div class="gd"><div class="gt"><b>Guía del panel de servicio</b><span>Productos, ofertas, combos, mensajes y fotos</span></div><div class="ga"><a class="btn sm primary" href="guias/panel.html">Abrir</a><a class="btn sm" href="guias/guia-panel-pyrox.pdf" target="_blank" rel="noopener">PDF</a></div></div>' +
+    '<div class="gd"><div class="gt"><b>Guía de la tienda</b><span>Cómo compra un cliente, de punta a punta</span></div><div class="ga"><a class="btn sm primary" href="guias/tienda.html">Abrir</a><a class="btn sm" href="guias/guia-tienda-pyrox.pdf" target="_blank" rel="noopener">PDF</a></div></div></div>' +
     '<div class="card"><b>Accesos</b><div class="linkrow"><a href="' + esc(S.sheetUrl) + '" target="_blank" rel="noopener">Abrir la hoja de cálculo</a><a href="' + esc(S.rootUrl) + '" target="_blank" rel="noopener">Abrir la carpeta de fotos y videos</a><a href="' + esc(S.siteUrl) + '" target="_blank" rel="noopener">Ver la tienda</a></div>' +
     '<div class="note">Cuando guardás algo acá, la hoja se actualiza al instante y la tienda lo muestra en unos minutos (Google refresca la hoja publicada cada ~5 minutos).</div></div></div>';
   $('#b-ss').onclick = function(){ this.setAttribute('aria-checked', this.getAttribute('aria-checked') !== 'true'); };
